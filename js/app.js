@@ -1,7 +1,6 @@
 /*-------------------------------- Constants --------------------------------*/
 const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
-const totalApples = 5
 const appleInitialLoc = 29
 
 let border={
@@ -55,7 +54,8 @@ function initialize(){
 
   apples = {
     idx: appleInitialLoc,
-    consumed: 0
+    consumed: 0,
+    total: 5
   }
 
   gameInProgress = false
@@ -141,8 +141,8 @@ function handleKeyPress(evt){
     checkGameEnd()
 
     if (!gameOver){
-      checkApple()
       updateSnakeArray()
+      checkApple()
       render()
     }
   }
@@ -151,13 +151,12 @@ function handleKeyPress(evt){
 
 function checkGameEnd(){
 
-  //check if keyPress leads snake off board
+  // if keyPress leads snake off board, game over!
   if (border[keyPress].some((idx) => idx === snake.headIdx)){
-    gameOver = true
-    console.log('gameover')
+    gameOver = 'lose'
+    console.log('you lost')
   }
-  // winner - update message
-  // loser - if snake is outside board
+
 }
 
 function checkApple(){
@@ -165,8 +164,12 @@ function checkApple(){
 
   if (snake.headIdx === apples.idx){
     ++apples.consumed
-    apples.idx
+    apples.idx //STOPPED HERE
 
+    if (apples.consumed === apples.total){
+      gameOver= 'win'
+      console.log('you won')
+    }
   }
 }
 
