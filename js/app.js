@@ -61,7 +61,6 @@ function initialize(){
   gameInProgress = false
 
   updateSnakeArray()
-  
   resetDom()
   renderBoard()
   render()
@@ -138,25 +137,34 @@ function handleKeyPress(evt){
 
   if (keyPress !== snake.oppDirection){
     snake.direction = keyPress
-    updateSnakeArray()
+
     checkGameEnd()
-    checkApple()
-    render()
+
+    if (!gameOver){
+      checkApple()
+      updateSnakeArray()
+      render()
+    }
   }
 
 }
 
 function checkGameEnd(){
-  // gameOver = true;
+
+  //check if keyPress leads snake off board
+  if (border[keyPress].some((idx) => idx === snake.headIdx)){
+    gameOver = true
+    console.log('gameover')
+  }
   // winner - update message
   // loser - if snake is outside board
 }
 
 function checkApple(){
   // apple eaten, update location of apple, update score, update snake size
+
   if (snake.headIdx === apples.idx){
     ++apples.consumed
-
     apples.idx
 
   }
