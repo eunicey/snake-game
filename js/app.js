@@ -1,7 +1,7 @@
 /*-------------------------------- Constants --------------------------------*/
 const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
-const appleInitialLoc = 29
+const appleInitialLoc = 28
 const boardArr = [...Array(totalCells).keys()]
 
 let border ={
@@ -129,9 +129,8 @@ function renderSnake(){
 function renderApple(){
   cellEls[apple.idx].classList.add('apple')
 
-  if (apple.gone) {
+  if (apple.last) {
     cellEls[apple.last].classList.remove('apple')
-    apple.gone = false
   }
 }
 
@@ -142,54 +141,52 @@ function handleKeyPress(evt){
   if (keyPress !== snake.oppDirection){
     snake.direction = keyPress
 
-    checkGameEnd()
-
-    if (!gameOver){
-      updateSnakeArray()
-      checkApple()
-      render()
+    checkForLoss()
+    updateSnakeArray()
+    updateApple()
+    checkForWin()
+    render()
     }
   }
 
-}
-
-function checkGameEnd(){
+function checkForLoss(){
 
   // if keyPress leads snake off board, game over!
   if(keyPress){
     if (border[keyPress].some((idx) => idx === snake.headIdx)){
       gameOver = 'lose'
       console.log('you lost')
-    } else if (apple.consumed === apple.total){
-      gameOver = 'won'
-      console.log('you won')
     }
   }
 }
 
-function checkApple(){
+function checkForWin(){
+  if (apple.consumed === apple.total){
+    gameOver = 'won'
+    console.log('you won')
+  }
+}
+
+function updateApple(){
+
   // apple eaten, update location of apple, update score, update snake size
 
   if (snake.headIdx === apple.idx){
 
+    if (!gameOver){
+
     // increase apple consumed count
     ++apple.consumed
 
-    checkGameEnd()
+    // store existing location of apple
+    apple.last = apple.idx
 
-    // create new location for apple
-    if (!gameOver){
-
-      // store existing location of apple
-      apple.gone = true
-      apple.last = apple.idx
-
-      // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
-      const appleOptions = boardArr.filter(function(idx){
-        return [...snake.arr, apple.idx].indexOf(idx) === -1
-      }) 
-      // randomly choose from the array  
-      apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
+    // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
+    const appleOptions = boardArr.filter(function(idx){
+      return [...snake.arr, apple.idx].indexOf(idx) === -1
+    }) 
+    // randomly choose from the array  
+    apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
     }
   }
 }
