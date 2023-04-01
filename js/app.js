@@ -25,7 +25,7 @@ for (let i=4; i<=49; i+=5){
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let gameInProgress, gameOver, apple, cellEls, keyPress, snake
+let gameInProgress, gameOver, apple, cellEls, keyPress, snake, timerIntervalId
 
 /*------------------------ Cached Element References ------------------------*/
 
@@ -62,7 +62,7 @@ function initialize(){
 
   gameInProgress = false
 
-  updateSnakeArray()
+  initializeSnake()
   resetDom()
   renderBoard()
   render()
@@ -76,12 +76,45 @@ function render(){
   renderScore()
 }
 
-function updateSnakeArray(){
+function startGame(){
+  timerIntervalId= setInterval(doAll, 500)
+}
+
+function doAll(){
+  checkForLoss()
+  updateSnakeArray()
+  updateApple()
+  checkForWin()
+  render()
+}
+
+function handleKeyPress(evt){
   if (!gameInProgress){
-    for (let i= snake.headIdx - snake.length +1; i<= snake.headIdx; i++) {
-      snake.arr.push(i)
-    }
-  } else {
+    startGame()
+    gameInProgress = true
+  }
+  
+  keyPress = evt.code
+
+  if (keyPress !== snake.oppDirection){
+    snake.direction = keyPress
+    // checkForLoss()
+    // updateSnakeArray()
+    // updateApple()
+    // checkForWin()
+    // render()
+  }
+}
+
+// Initialize snake
+function initializeSnake(){
+  for (let i= snake.headIdx - snake.length +1; i<= snake.headIdx; i++) {
+    snake.arr.push(i)
+  }
+}
+
+// Update location of snake
+function updateSnakeArray(){
 
     if (keyPress === 'ArrowRight'){
       ++ snake.headIdx
@@ -98,8 +131,29 @@ function updateSnakeArray(){
     }
     snake.last = snake.arr.shift()
     snake.arr.push(snake.headIdx)
-  }
-} 
+}
+
+
+// Update location of apple
+function updateApple(){
+
+  // apple eaten, update location of apple, update score, update snake size
+  if (snake.headIdx === apple.idx){
+
+      // increase apple consumed count
+      ++apple.consumed
+
+      // store existing location of apple
+      apple.last = apple.idx
+
+      // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
+      const appleOptions = boardArr.filter(function(idx){
+        return [...snake.arr, apple.idx].indexOf(idx) === -1
+      }) 
+      // randomly choose from the array  
+      apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
+    }
+}
 
 // render board
 function renderBoard(){
@@ -127,27 +181,14 @@ function renderSnake(){
 
 // render apple
 function renderApple(){
-  cellEls[apple.idx].classList.add('apple')
+  if (!gameOver){
+    cellEls[apple.idx].classList.add('apple')
 
-  if (apple.last) {
-    cellEls[apple.last].classList.remove('apple')
-  }
-}
-
-function handleKeyPress(evt){
-  gameInProgress = true
-  keyPress = evt.code
-
-  if (keyPress !== snake.oppDirection){
-    snake.direction = keyPress
-
-    checkForLoss()
-    updateSnakeArray()
-    updateApple()
-    checkForWin()
-    render()
+    if (apple.last) {
+      cellEls[apple.last].classList.remove('apple')
     }
   }
+}
 
 function checkForLoss(){
 
@@ -156,41 +197,20 @@ function checkForLoss(){
     if (border[keyPress].some((idx) => idx === snake.headIdx)){
       gameOver = 'lose'
       console.log('you lost')
+      clearInterval(timerIntervalId)
     }
   }
 }
 
 function checkForWin(){
+
+  // if all apples are consumed, game over
   if (apple.consumed === apple.total){
     gameOver = 'won'
     console.log('you won')
+    clearInterval(timerIntervalId)
   }
 }
-
-function updateApple(){
-
-  // apple eaten, update location of apple, update score, update snake size
-
-  if (snake.headIdx === apple.idx){
-
-    if (!gameOver){
-
-    // increase apple consumed count
-    ++apple.consumed
-
-    // store existing location of apple
-    apple.last = apple.idx
-
-    // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
-    const appleOptions = boardArr.filter(function(idx){
-      return [...snake.arr, apple.idx].indexOf(idx) === -1
-    }) 
-    // randomly choose from the array  
-    apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
-    }
-  }
-}
-
 
 // render message
 function renderMessage(){
