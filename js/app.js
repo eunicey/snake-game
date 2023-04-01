@@ -44,13 +44,14 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    length : 3,
+    length : 1,
     headIdx : 27,
     speed : 1000,
     radiation: 0,
     direction: 'ArrowRight',
     oppDirection: 'ArrowLeft',
-    arr: []
+    arr: [],
+    grow: false
   }
 
   apple = {
@@ -70,10 +71,10 @@ function initialize(){
 
 // render game
 function render(){
-  renderSnake()
-  renderApple()
   renderMessage()
   renderScore()
+  renderSnake()
+  renderApple()
 }
 
 function startGame(){
@@ -98,11 +99,6 @@ function handleKeyPress(evt){
 
   if (keyPress !== snake.oppDirection){
     snake.direction = keyPress
-    // checkForLoss()
-    // updateSnakeArray()
-    // updateApple()
-    // checkForWin()
-    // render()
   }
 }
 
@@ -129,7 +125,12 @@ function updateSnakeArray(){
       snake.headIdx += 5
       snake.oppDirection = 'ArrowUp'
     }
-    snake.last = snake.arr.shift()
+    if (!snake.grow){
+      snake.last = snake.arr.shift()
+    } else {
+      snake.grow = false
+    }
+
     snake.arr.push(snake.headIdx)
 }
 
@@ -140,19 +141,22 @@ function updateApple(){
   // apple eaten, update location of apple, update score, update snake size
   if (snake.headIdx === apple.idx){
 
-      // increase apple consumed count
-      ++apple.consumed
+    // increase apple consumed count
+    ++apple.consumed
 
-      // store existing location of apple
-      apple.last = apple.idx
+    // store existing location of apple
+    apple.last = apple.idx
 
-      // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
-      const appleOptions = boardArr.filter(function(idx){
-        return [...snake.arr, apple.idx].indexOf(idx) === -1
-      }) 
-      // randomly choose from the array  
-      apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
-    }
+    // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
+    const appleOptions = boardArr.filter(function(idx){
+      return [...snake.arr, apple.idx].indexOf(idx) === -1
+    }) 
+    // randomly choose from the array  
+    apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
+
+    // 
+    snake.grow = true
+  }
 }
 
 // render board
@@ -169,7 +173,6 @@ function renderBoard(){
 
 // render snake
 function renderSnake(){
-
   snake.arr.forEach(function(idx){
     cellEls[idx].classList.add('snake')
   })
