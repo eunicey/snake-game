@@ -2,8 +2,9 @@
 const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
 const appleInitialLoc = 29
+const boardArr = [...Array(totalCells).keys()]
 
-let border={
+let border ={
   ArrowUp:[],
   ArrowDown:[],
   ArrowLeft:[],
@@ -24,7 +25,7 @@ for (let i=4; i<=49; i+=5){
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let gameInProgress, gameOver, apples, cellEls, boardArr, keyPress, snake
+let gameInProgress, gameOver, apples, cellEls, keyPress, snake
 
 /*------------------------ Cached Element References ------------------------*/
 
@@ -152,26 +153,37 @@ function handleKeyPress(evt){
 function checkGameEnd(){
 
   // if keyPress leads snake off board, game over!
-  if (border[keyPress].some((idx) => idx === snake.headIdx)){
-    gameOver = 'lose'
-    console.log('you lost')
+  if(keyPress){
+    if (border[keyPress].some((idx) => idx === snake.headIdx)){
+      gameOver = 'lose'
+      console.log('you lost')
+    } else if (apples.consumed === apples.total){
+      gameOver = 'won'
+      console.log('you won')
+    }
   }
-
 }
 
 function checkApple(){
   // apple eaten, update location of apple, update score, update snake size
 
   if (snake.headIdx === apples.idx){
-    ++apples.consumed
-    apples.idx //STOPPED HERE
 
-    if (apples.consumed === apples.total){
-      gameOver= 'win'
-      console.log('you won')
+    // increase apple consumed count
+    ++apples.consumed
+
+    checkGameEnd()
+    if (!gameOver){
+      // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
+      const appleOptions = boardArr.filter(function(idx){
+        return [...snake.arr, apples.idx].indexOf(idx) === -1
+      })    
+      // randomly choose from the array  
+      apples.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
     }
   }
 }
+
 
 // render message
 function renderMessage(){
