@@ -1,7 +1,7 @@
 /*-------------------------------- Constants --------------------------------*/
 const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
-const appleInitialLoc = 28
+const appleInitialLoc = 29
 const boardArr = [...Array(totalCells).keys()]
 
 let border ={
@@ -44,7 +44,7 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    length : 1,
+    length : 3,
     headIdx : 27,
     speed : 1000,
     radiation: 0,
@@ -78,15 +78,13 @@ function render(){
 }
 
 function startGame(){
-  timerIntervalId= setInterval(doAll, 500)
-}
-
-function doAll(){
-  checkForLoss()
-  updateSnakeArray()
-  updateApple()
-  checkForWin()
-  render()
+  timerIntervalId= setInterval(function(){
+    checkForLoss()
+    updateSnakeArray()
+    updateApple()
+    checkForWin()
+    render()
+  }, 500)
 }
 
 function handleKeyPress(evt){
@@ -112,16 +110,16 @@ function initializeSnake(){
 // Update location of snake
 function updateSnakeArray(){
 
-    if (keyPress === 'ArrowRight'){
+    if (snake.direction  === 'ArrowRight'){
       ++ snake.headIdx
       snake.oppDirection = 'ArrowLeft'
-    } else if (keyPress === 'ArrowLeft'){
+    } else if (snake.direction  === 'ArrowLeft'){
       -- snake.headIdx
       snake.oppDirection = 'ArrowRight'
-    } else if (keyPress === 'ArrowUp'){
+    } else if (snake.direction  === 'ArrowUp'){
       snake.headIdx -= 5
       snake.oppDirection = 'ArrowDown'
-    } else if (keyPress === 'ArrowDown'){
+    } else if (snake.direction  === 'ArrowDown'){
       snake.headIdx += 5
       snake.oppDirection = 'ArrowUp'
     }
@@ -130,7 +128,6 @@ function updateSnakeArray(){
     } else {
       snake.grow = false
     }
-
     snake.arr.push(snake.headIdx)
 }
 
@@ -161,29 +158,33 @@ function updateApple(){
 
 // render board
 function renderBoard(){
+
   for (let i=0; i< totalCells; i++) {
     let cell = document.createElement('div');
     cell.className = 'cell'
-    // cell.setAttribute('id', i)
     cell.textContent = i;
     boardEl.appendChild(cell)
   }  
+
   cellEls = document.querySelectorAll('.board > .cell')
 }
 
 // render snake
 function renderSnake(){
-  snake.arr.forEach(function(idx){
-    cellEls[idx].classList.add('snake')
-  })
+    if (gameOver!== 'lose'){
+      snake.arr.forEach(function(idx){
+        cellEls[idx].classList.add('snake')
+      })
 
-  if (gameInProgress) {
-    cellEls[snake.last].classList.remove('snake')
+      if (gameInProgress) {
+        cellEls[snake.last].classList.remove('snake')
+      }
   }
 }
 
 // render apple
 function renderApple(){
+
   if (!gameOver){
     cellEls[apple.idx].classList.add('apple')
 
@@ -195,14 +196,14 @@ function renderApple(){
 
 function checkForLoss(){
 
-  // if keyPress leads snake off board, game over!
-  if(keyPress){
-    if (border[keyPress].some((idx) => idx === snake.headIdx)){
+  // if snake is moving off board, game over!
+  // if snake's head overlaps with it's body, game over
+    if (border[snake.direction].some((idx) => idx === snake.headIdx) ||
+    snake.arr.some((segment) => segment === snake.headIdx)){ //BUG
       gameOver = 'lose'
       console.log('you lost')
       clearInterval(timerIntervalId)
     }
-  }
 }
 
 function checkForWin(){
@@ -227,5 +228,4 @@ function renderScore(){
 }
 
 function resetDom(){
-
 }

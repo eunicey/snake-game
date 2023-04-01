@@ -11,12 +11,12 @@
 
 .cell.apple {
   color: red;
-  background-color: red;
+  /* background-color: red; */
 }
 
 .cell.snake {
   color: white;
-  background-color: white;
+  /* background-color: white; */
 }
 
 
