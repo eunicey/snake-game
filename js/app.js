@@ -25,7 +25,7 @@ for (let i=4; i<=49; i+=5){
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let gameInProgress, gameOver, apples, cellEls, keyPress, snake
+let gameInProgress, gameOver, apple, cellEls, keyPress, snake
 
 /*------------------------ Cached Element References ------------------------*/
 
@@ -53,10 +53,11 @@ function initialize(){
     arr: []
   }
 
-  apples = {
+  apple = {
     idx: appleInitialLoc,
     consumed: 0,
-    total: 5
+    total: 5,
+    gone: false
   }
 
   gameInProgress = false
@@ -67,8 +68,15 @@ function initialize(){
   render()
 }
 
-function updateSnakeArray(){
+// render game
+function render(){
+  renderSnake()
+  renderApple()
+  renderMessage()
+  renderScore()
+}
 
+function updateSnakeArray(){
   if (!gameInProgress){
     for (let i= snake.headIdx - snake.length +1; i<= snake.headIdx; i++) {
       snake.arr.push(i)
@@ -88,18 +96,10 @@ function updateSnakeArray(){
       snake.headIdx += 5
       snake.oppDirection = 'ArrowUp'
     }
-    snake.arr.last = snake.arr.shift()
+    snake.last = snake.arr.shift()
     snake.arr.push(snake.headIdx)
   }
 } 
-
-// render game
-function render(){
-  renderSnake()
-  renderApple()
-  renderMessage()
-  renderScore()
-}
 
 // render board
 function renderBoard(){
@@ -121,15 +121,18 @@ function renderSnake(){
   })
 
   if (gameInProgress) {
-    cellEls[snake.arr.last].classList.remove('snake')
+    cellEls[snake.last].classList.remove('snake')
   }
-
-  // if lost, make snake red
 }
 
 // render apple
 function renderApple(){
-  cellEls[apples.idx].classList.add('apple')
+  cellEls[apple.idx].classList.add('apple')
+
+  if (apple.gone) {
+    cellEls[apple.last].classList.remove('apple')
+    apple.gone = false
+  }
 }
 
 function handleKeyPress(evt){
@@ -157,7 +160,7 @@ function checkGameEnd(){
     if (border[keyPress].some((idx) => idx === snake.headIdx)){
       gameOver = 'lose'
       console.log('you lost')
-    } else if (apples.consumed === apples.total){
+    } else if (apple.consumed === apple.total){
       gameOver = 'won'
       console.log('you won')
     }
@@ -167,19 +170,26 @@ function checkGameEnd(){
 function checkApple(){
   // apple eaten, update location of apple, update score, update snake size
 
-  if (snake.headIdx === apples.idx){
+  if (snake.headIdx === apple.idx){
 
     // increase apple consumed count
-    ++apples.consumed
+    ++apple.consumed
 
     checkGameEnd()
+
+    // create new location for apple
     if (!gameOver){
+
+      // store existing location of apple
+      apple.gone = true
+      apple.last = apple.idx
+
       // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
       const appleOptions = boardArr.filter(function(idx){
-        return [...snake.arr, apples.idx].indexOf(idx) === -1
-      })    
+        return [...snake.arr, apple.idx].indexOf(idx) === -1
+      }) 
       // randomly choose from the array  
-      apples.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
+      apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
     }
   }
 }
