@@ -49,6 +49,7 @@ let apple, snake, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, 
 const resetBtnEl= document.getElementById('reset')
 const boardEl = document.querySelector('.board')
 const messageEl = document.querySelector('.message')
+const scoreEl = document.querySelector('.score')
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -265,5 +266,5 @@ function renderMessage(){
 }
 
 function renderScore(){
-  
+  scoreEl.textContent = `${apple.consumed} of ${apple.total}`
 }
