@@ -42,13 +42,13 @@ for (let i=4; i<=49; i+=5){
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let gameInProgress, gameOver, apple, cellEls, keyPress, snake, timerIntervalId
+let apple, snake, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message
 
 /*------------------------ Cached Element References ------------------------*/
 
 const resetBtnEl= document.getElementById('reset')
 const boardEl = document.querySelector('.board')
-const bodyEl = document.querySelector('body')
+const messageEl = document.querySelector('.message')
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -84,8 +84,8 @@ function initialize(){
 
 // Render Game
 function render(){
-  renderMessage()
   renderScore()
+  renderMessage()
   renderSnake()
   renderApple()
 }
@@ -186,7 +186,7 @@ function updateApple(){
 function renderBoard(){
 
   for (let i=0; i< totalCells; i++) {
-    let cell = document.createElement('div');
+    const cell = document.createElement('div'); //can this not be reused?
     cell.className = 'cell'
     cell.textContent = i;
     boardEl.appendChild(cell)
@@ -200,7 +200,7 @@ function renderSnake(){
 
     // render full snake during initialization
     if (!gameInProgress){
-      let snakeArray = [...snake.body, snake.headIdx]
+      const snakeArray = [...snake.body, snake.headIdx]
       snakeArray.forEach(function(idx){
         cellEls[idx].classList.add('snake')
       })
@@ -245,7 +245,7 @@ function checkForLoss(){
 function checkForWin(){
 
   if (apple.consumed === apple.total){
-    gameOver = 'won'
+    gameOver = 'win'
     console.log('you won')
     clearInterval(timerIntervalId)
   }
@@ -253,15 +253,17 @@ function checkForWin(){
 
 // render message
 function renderMessage(){
-  // how to start game
-  // when player wins or loses
+
+  if (!gameInProgress){
+    message = 'Press any arrow key to begin!'
+  } else if (gameOver) {
+    message = `You ${gameOver}!`
+  } else {
+    message = 'placeholder'
+  }
+  messageEl.textContent = message
 }
 
 function renderScore(){
-  // initial state
-  // when score updates
-}
-
-function resetDom(){
-  initialize()
+  
 }
