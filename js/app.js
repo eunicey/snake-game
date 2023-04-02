@@ -113,9 +113,28 @@ function initializeSnake(){
 
 // Update location of snake
 function updateSnakeArray(){
-
+    // before updating snake head location, add existing location to body array
     snake.body.push(snake.headIdx)
 
+    // remove the first index of the snake body and cache it
+    snake.grow ? snake.grow = false : snake.last = snake.body.shift()
+
+    // switch (snake.direction) {
+    //   case 'ArrowRight':
+    //     ++ snake.headIdx
+    //     snake.oppDirection = 'ArrowLeft'
+    //   case 'ArrowLeft': 
+    //     -- snake.headIdx
+    //     snake.oppDirection = 'ArrowRight'
+    //   case 'ArrowUp':
+    //     snake.headIdx -= 5
+    //     snake.oppDirection = 'ArrowDown'
+    //   case 'ArrowDown':
+    //     snake.headIdx += 5
+    //     snake.oppDirection = 'ArrowUp'
+    // }
+
+  
     if (snake.direction  === 'ArrowRight'){
       ++ snake.headIdx
       snake.oppDirection = 'ArrowLeft'
@@ -128,11 +147,6 @@ function updateSnakeArray(){
     } else if (snake.direction  === 'ArrowDown'){
       snake.headIdx += 5
       snake.oppDirection = 'ArrowUp'
-    }
-    if (!snake.grow){
-      snake.last = snake.body.shift()
-    } else {
-      snake.grow = false
     }
 }
 
@@ -149,11 +163,9 @@ function updateApple(){
     // store existing location of apple
     apple.last = apple.idx
 
-    // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
+    // update apple location so that it does not coincide with current apple and snake locations
     const occupiedCells = [...snake.body, snake.headIdx, apple.idx]
     const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
-
-    // randomly choose from the array  
     apple.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
 
     // update snake: tail idx remains the same (snake grows) and snake glow level increases (if not at max)
