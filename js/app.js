@@ -1,9 +1,9 @@
 /*-------------------------------- Constants --------------------------------*/
 const totalCells = 50
-const glow = [0, 1, 2, 3, 4, 5]
 const appleInitialLoc = 29
-const boardArr = [...Array(totalCells).keys()]
+const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
 
 let border ={
   ArrowUp:[],
@@ -45,15 +45,13 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    length : 2,
     headIdx : 26,
-    speed : 1000,
-    radiation: 0,
-    direction: 'ArrowRight',
-    oppDirection: 'ArrowLeft',
     body: [],
-    // arr: [],
-    grow: false
+    glowIdx: 0,
+    length : 2,
+    grow: false,
+    direction: 'ArrowRight',
+    oppDirection: 'ArrowLeft'
   }
 
   apple = {
@@ -152,15 +150,15 @@ function updateApple(){
     apple.last = apple.idx
 
     // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
-    const appleOptions = boardArr.filter(function(cell){
-      let occupiedCells = [...snake.body, snake.headIdx, apple.idx]
-      return occupiedCells.indexOf(cell) === -1
-    }) 
-    // randomly choose from the array  
-    apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
+    const occupiedCells = [...snake.body, snake.headIdx, apple.idx]
+    const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
 
-    // 
+    // randomly choose from the array  
+    apple.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
+
+    // update snake: tail idx remains the same (snake grows) and snake glow level increases (if not at max)
     snake.grow = true
+    snake.glowIdx === glow.length ? glow.length : ++snake.glowIdx
   }
 }
 
