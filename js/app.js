@@ -52,14 +52,14 @@ function initialize(){
     direction: 'ArrowRight',
     oppDirection: 'ArrowLeft',
     body: [],
-    arr: [],
+    // arr: [],
     grow: false
   }
 
   apple = {
     idx: appleInitialLoc,
     consumed: 0,
-    total: 5,
+    total: 10,
     gone: false
   }
 
@@ -92,14 +92,17 @@ function startGame(){
 function handleKeyPress(evt){
   
   keyPress = evt.code
+  // execute if key is one of the arrow keys
+  if (arrowKeys.find(key => key === keyPress)){
 
-  if (keyPress !== snake.oppDirection){
-    snake.direction = keyPress
-  }
-  if (!gameInProgress){
-    gameInProgress = true
-    startGame()
-    
+    // do not register keypress if it's in the opposite direction of current motion)
+    if (keyPress !== snake.oppDirection){
+      snake.direction = keyPress
+    }
+    if (!gameInProgress){
+      gameInProgress = true
+      startGame()
+    }
   }
 }
 
@@ -108,7 +111,6 @@ function initializeSnake(){
   for (let i= snake.headIdx - snake.length +1; i< snake.headIdx; i++) {
     snake.body.push(i)
   }
-  // snake.arr = [...snake.body, snake.headIdx]
 }
 
 // Update location of snake
@@ -134,7 +136,6 @@ function updateSnakeArray(){
     } else {
       snake.grow = false
     }
-    // snake.arr.push(snake.headIdx)
 }
 
 
@@ -185,6 +186,7 @@ function renderSnake(){
           cellEls[idx].classList.add('snake')
         })
 
+      // ignore this during initilizae process
       if (gameInProgress){
           cellEls[snake.last].classList.remove('snake')
       }
@@ -208,7 +210,7 @@ function checkForLoss(){
   // if snake is moving off board, game over!
   // if snake's head overlaps with it's body, game over
     if (border[snake.direction].some((idx) => idx === snake.headIdx) ||
-    snake.body.some((segment) => segment === snake.headIdx)){ //BUG
+    snake.body.some((segment) => segment === snake.headIdx)){
       gameOver = 'lose'
       console.log('you lost')
       clearInterval(timerIntervalId)
