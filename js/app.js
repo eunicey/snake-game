@@ -53,9 +53,10 @@ const bodyEl = document.querySelector('body')
 /*----------------------------- Event Listeners -----------------------------*/
 
 addEventListener('keydown', handleKeyPress) 
-resetBtnEl.addEventListener('click', initialize)
+resetBtnEl.addEventListener('click', resetGame)
 
-/*-------------------------------- Functions --------------------------------*/
+/*-------------------------------- Primary Functions --------------------------------*/
+renderBoard() //Okay that this is outside of initialize? don't want to re-render with reset.
 initialize()
 
 // Initialize Game State
@@ -75,10 +76,9 @@ function initialize(){
 
   direction= 'right'
   gameInProgress = false
+  gameOver = false
 
   initializeSnake()
-  resetDom()
-  renderBoard()
   render()
 }
 
@@ -101,6 +101,7 @@ function startGame(){
   }, speed)
 }
 
+/*-------------------------------- Handle Event Listeners --------------------------------*/
 // Handle Key Presses
 function handleKeyPress(evt){
   
@@ -123,6 +124,13 @@ function handleKeyPress(evt){
       startGame()
     }
   }
+}
+
+function resetGame(){
+
+  // remove all apple and snake classes
+  boardEl.querySelectorAll('.apple, .snake').forEach(el => el.classList.remove('apple','snake'))
+  initialize()
 }
 
 /*-------------------------------- Update Model  --------------------------------*/
@@ -187,7 +195,7 @@ function renderBoard(){
   cellEls = document.querySelectorAll('.board > .cell') // can't add this to cached elements?
 }
 
-// render snake
+// Render Snake
 function renderSnake(){
 
     // render full snake during initialization
@@ -210,29 +218,32 @@ function renderSnake(){
 function renderApple(){
 
   if (!gameOver){
+
     cellEls[apple.idx].classList.add('apple')
 
+    // Remove CSS for previous apple (if it exists)
     if (apple.last) {
       cellEls[apple.last].classList.remove('apple')
     }
   }
 }
 
+// Check if player lost
 function checkForLoss(){
 
-  // if snake is moving off board, game over!
-  // if snake's head overlaps with it's body, game over
-    if (motionRules[direction].border.some((idx) => idx === snake.headIdx) ||
-    snake.body.some((segment) => segment === snake.headIdx)){
-      gameOver = 'lose'
-      console.log('you lost')
-      clearInterval(timerIntervalId)
-    }
+  // Snake's head overlaps with board border and direction is No-No OR
+  // Snake's head overlaps with body segment
+  if (motionRules[direction].border.some((idx) => idx === snake.headIdx) ||
+  snake.body.some((segment) => segment === snake.headIdx)){
+    gameOver = 'lose'
+    console.log('you lost')
+    clearInterval(timerIntervalId)
+  }
 }
 
+// Check if player won - all apples consumed
 function checkForWin(){
 
-  // if all apples are consumed, game over
   if (apple.consumed === apple.total){
     gameOver = 'won'
     console.log('you won')
@@ -252,4 +263,5 @@ function renderScore(){
 }
 
 function resetDom(){
+  initialize()
 }
