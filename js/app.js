@@ -3,6 +3,7 @@ const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
+const speed = 500 //ms
 
 const motionRules = {
   up : {
@@ -60,18 +61,16 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    headIdx : 26, //should this be a constant?
-    body: [],
+    headIdx : 27, //should this be a constant?
     glowIdx: 0,
-    length : 2,
+    bodyLength : 2, //should this be a constant b/c it doesn't change?
     grow: false,
   }
 
   apple = {
     idx: 29, //should this be a constant?
     consumed: 0,
-    total: 10,
-    gone: false
+    total: 5, //should this be a constant b/c it doesn't change?
   }
 
   direction= 'right'
@@ -91,6 +90,7 @@ function render(){
   renderApple()
 }
 
+// run game
 function startGame(){
   timerIntervalId= setInterval(function(){
     checkForLoss()
@@ -98,7 +98,7 @@ function startGame(){
     updateApple()
     checkForWin()
     render()
-  }, 500)
+  }, speed)
 }
 
 function handleKeyPress(evt){
@@ -107,26 +107,30 @@ function handleKeyPress(evt){
 
   // execute if key is one of the arrow keys
   if (arrowKeys.find(key => key === keyPress)){
+
+    // make keyPress match variable keys (up, down,..)
     keyPress= keyPress.replace('Arrow','').toLowerCase() // why do I need to redeclare?
     
-    // do not register keypress if it's in the opposite direction of current motion)
+    // update direction only if it is not in the opposite direction of current motion
     if (keyPress !== motionRules[direction].oppDirection){
       direction = keyPress
     }
+
+    // run game once first key is pressed
     if (!gameInProgress){
       gameInProgress = true
       startGame()
     }
-    
   }
 }
 
 // Initialize snake
 function initializeSnake(){
-  for (let i= snake.headIdx - snake.length +1; i< snake.headIdx; i++) {
-    snake.body.push(i)
-  }
+  
+  //create array that represent indices for body
+  snake.body = Array(snake.bodyLength).fill(snake.headIdx - snake.bodyLength).map((x, y) => x + y)
 }
+
 
 // Update location of snake
 function updateSnakeArray(){
@@ -185,7 +189,7 @@ function renderSnake(){
           cellEls[idx].classList.add('snake')
         })
 
-      // ignore this during initilizae process
+      // ignore this during initialize process
       if (gameInProgress){
           cellEls[snake.last].classList.remove('snake')
       }
