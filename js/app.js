@@ -1,28 +1,43 @@
 /*-------------------------------- Constants --------------------------------*/
 const totalCells = 50
-const appleInitialLoc = 29
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
 
-let border ={
-  ArrowUp:[],
-  ArrowDown:[],
-  ArrowLeft:[],
-  ArrowRight:[]
+const motionRules = {
+  up : {
+    oppDirection : 'down',
+    idxAdd : -5,
+    border: []
+  },
+  down : {
+    oppDirection : 'up',
+    idxAdd : 5,
+    border: []
+  },
+  left : {
+    oppDirection : 'right',
+    idxAdd : -1,
+    border: []
+  },
+  right : {
+    oppDirection : 'left',
+    idxAdd : 1,
+    border: []
+  }
 }
 
 for (let i=0; i<=4; i++){
-  border.ArrowUp.push(i)
+  motionRules.up.border.push(i)
 }
 for (let i=45; i<=49; i++){
-  border.ArrowDown.push(i)
+  motionRules.down.border.push(i)
 }
 for (let i=0; i<=45; i+=5){
-  border.ArrowLeft.push(i)
+  motionRules.left.border.push(i)
 }
 for (let i=4; i<=49; i+=5){
-  border.ArrowRight.push(i)
+  motionRules.right.border.push(i)
 }
 
 /*-------------------------------- Variables --------------------------------*/
@@ -45,22 +60,21 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    headIdx : 26,
+    headIdx : 26, //should this be a constant?
     body: [],
     glowIdx: 0,
     length : 2,
     grow: false,
-    direction: 'ArrowRight',
-    oppDirection: 'ArrowLeft'
   }
 
   apple = {
-    idx: appleInitialLoc,
+    idx: 29, //should this be a constant?
     consumed: 0,
     total: 10,
     gone: false
   }
 
+  direction= 'right'
   gameInProgress = false
 
   initializeSnake()
@@ -90,17 +104,20 @@ function startGame(){
 function handleKeyPress(evt){
   
   keyPress = evt.code
+
   // execute if key is one of the arrow keys
   if (arrowKeys.find(key => key === keyPress)){
-
+    keyPress= keyPress.replace('Arrow','').toLowerCase() // why do I need to redeclare?
+    
     // do not register keypress if it's in the opposite direction of current motion)
-    if (keyPress !== snake.oppDirection){
-      snake.direction = keyPress
+    if (keyPress !== motionRules[direction].oppDirection){
+      direction = keyPress
     }
     if (!gameInProgress){
       gameInProgress = true
       startGame()
     }
+    
   }
 }
 
@@ -119,35 +136,7 @@ function updateSnakeArray(){
     // remove the first index of the snake body and cache it
     snake.grow ? snake.grow = false : snake.last = snake.body.shift()
 
-    // switch (snake.direction) {
-    //   case 'ArrowRight':
-    //     ++ snake.headIdx
-    //     snake.oppDirection = 'ArrowLeft'
-    //   case 'ArrowLeft': 
-    //     -- snake.headIdx
-    //     snake.oppDirection = 'ArrowRight'
-    //   case 'ArrowUp':
-    //     snake.headIdx -= 5
-    //     snake.oppDirection = 'ArrowDown'
-    //   case 'ArrowDown':
-    //     snake.headIdx += 5
-    //     snake.oppDirection = 'ArrowUp'
-    // }
-
-  
-    if (snake.direction  === 'ArrowRight'){
-      ++ snake.headIdx
-      snake.oppDirection = 'ArrowLeft'
-    } else if (snake.direction  === 'ArrowLeft'){
-      -- snake.headIdx
-      snake.oppDirection = 'ArrowRight'
-    } else if (snake.direction  === 'ArrowUp'){
-      snake.headIdx -= 5
-      snake.oppDirection = 'ArrowDown'
-    } else if (snake.direction  === 'ArrowDown'){
-      snake.headIdx += 5
-      snake.oppDirection = 'ArrowUp'
-    }
+    snake.headIdx += motionRules[direction].idxAdd
 }
 
 
@@ -219,7 +208,7 @@ function checkForLoss(){
 
   // if snake is moving off board, game over!
   // if snake's head overlaps with it's body, game over
-    if (border[snake.direction].some((idx) => idx === snake.headIdx) ||
+    if (motionRules[direction].border.some((idx) => idx === snake.headIdx) ||
     snake.body.some((segment) => segment === snake.headIdx)){
       gameOver = 'lose'
       console.log('you lost')
