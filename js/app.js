@@ -58,7 +58,7 @@ resetBtnEl.addEventListener('click', initialize)
 /*-------------------------------- Functions --------------------------------*/
 initialize()
 
-// initialize game state
+// Initialize Game State
 function initialize(){
   snake= {
     headIdx : 27, //should this be a constant?
@@ -82,7 +82,7 @@ function initialize(){
   render()
 }
 
-// render game
+// Render Game
 function render(){
   renderMessage()
   renderScore()
@@ -90,17 +90,18 @@ function render(){
   renderApple()
 }
 
-// run game
+// Run Game
 function startGame(){
   timerIntervalId= setInterval(function(){
     checkForLoss()
-    updateSnakeArray()
+    updateSnake()
     updateApple()
     checkForWin()
     render()
   }, speed)
 }
 
+// Handle Key Presses
 function handleKeyPress(evt){
   
   keyPress = evt.code
@@ -124,30 +125,32 @@ function handleKeyPress(evt){
   }
 }
 
-// Initialize snake
+/*-------------------------------- Update Model  --------------------------------*/
+
+// Initialize Snake
 function initializeSnake(){
-  
+
   //create array that represent indices for body
   snake.body = Array(snake.bodyLength).fill(snake.headIdx - snake.bodyLength).map((x, y) => x + y)
 }
 
+// Update Snake Location
+function updateSnake(){
 
-// Update location of snake
-function updateSnakeArray(){
-    // before updating snake head location, add existing location to body array
+    // add existing location to body array
     snake.body.push(snake.headIdx)
 
     // remove the first index of the snake body and cache it
     snake.grow ? snake.grow = false : snake.last = snake.body.shift()
 
+    // update snake head location
     snake.headIdx += motionRules[direction].idxAdd
 }
 
-
-// Update location of apple
+// Update Apple Location
 function updateApple(){
 
-  // apple eaten, update location of apple, update score, update snake size
+  // if snake head overlaps with apple location:
   if (snake.headIdx === apple.idx){
 
     // increase apple consumed count
@@ -161,13 +164,17 @@ function updateApple(){
     const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
     apple.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
 
-    // update snake: tail idx remains the same (snake grows) and snake glow level increases (if not at max)
+    // snake grows = snake tail location stays the same 
     snake.grow = true
+
+    // increase snake glow level unless at max
     snake.glowIdx === glow.length ? glow.length : ++snake.glowIdx
   }
 }
 
-// render board
+/*-------------------------------- Update View  --------------------------------*/
+
+// Render Board
 function renderBoard(){
 
   for (let i=0; i< totalCells; i++) {
@@ -177,26 +184,29 @@ function renderBoard(){
     boardEl.appendChild(cell)
   }  
 
-  cellEls = document.querySelectorAll('.board > .cell')
+  cellEls = document.querySelectorAll('.board > .cell') // can't add this to cached elements?
 }
 
 // render snake
 function renderSnake(){
-    if (gameOver!== 'lose'){
-      // if (!gameOver){
-        let snakeArray = [...snake.body, snake.headIdx]
-        snakeArray.forEach(function(idx){
-          cellEls[idx].classList.add('snake')
-        })
 
-      // ignore this during initialize process
-      if (gameInProgress){
-          cellEls[snake.last].classList.remove('snake')
-      }
+    // render full snake during initialization
+    if (!gameInProgress){
+      let snakeArray = [...snake.body, snake.headIdx]
+      snakeArray.forEach(function(idx){
+        cellEls[idx].classList.add('snake')
+      })
+    
+    // update CSS for snake head and tail if player didn't lose
+    } else {
+      if (gameOver!== 'lose'){
+        cellEls[snake.headIdx].classList.add('snake')
+        cellEls[snake.last].classList.remove('snake')
+      } 
+    }
   }
-}
 
-// render apple
+// Render Apple
 function renderApple(){
 
   if (!gameOver){
