@@ -3,6 +3,7 @@ const totalCells = 50
 const glow = [0, 1, 2, 3, 4, 5]
 const appleInitialLoc = 29
 const boardArr = [...Array(totalCells).keys()]
+const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
 let border ={
   ArrowUp:[],
@@ -44,12 +45,13 @@ initialize()
 // initialize game state
 function initialize(){
   snake= {
-    length : 3,
-    headIdx : 27,
+    length : 2,
+    headIdx : 26,
     speed : 1000,
     radiation: 0,
     direction: 'ArrowRight',
     oppDirection: 'ArrowLeft',
+    body: [],
     arr: [],
     grow: false
   }
@@ -88,27 +90,31 @@ function startGame(){
 }
 
 function handleKeyPress(evt){
-  if (!gameInProgress){
-    startGame()
-    gameInProgress = true
-  }
   
   keyPress = evt.code
 
   if (keyPress !== snake.oppDirection){
     snake.direction = keyPress
   }
+  if (!gameInProgress){
+    gameInProgress = true
+    startGame()
+    
+  }
 }
 
 // Initialize snake
 function initializeSnake(){
-  for (let i= snake.headIdx - snake.length +1; i<= snake.headIdx; i++) {
-    snake.arr.push(i)
+  for (let i= snake.headIdx - snake.length +1; i< snake.headIdx; i++) {
+    snake.body.push(i)
   }
+  // snake.arr = [...snake.body, snake.headIdx]
 }
 
 // Update location of snake
 function updateSnakeArray(){
+
+    snake.body.push(snake.headIdx)
 
     if (snake.direction  === 'ArrowRight'){
       ++ snake.headIdx
@@ -124,11 +130,11 @@ function updateSnakeArray(){
       snake.oppDirection = 'ArrowUp'
     }
     if (!snake.grow){
-      snake.last = snake.arr.shift()
+      snake.last = snake.body.shift()
     } else {
       snake.grow = false
     }
-    snake.arr.push(snake.headIdx)
+    // snake.arr.push(snake.headIdx)
 }
 
 
@@ -145,8 +151,9 @@ function updateApple(){
     apple.last = apple.idx
 
     // create an array of possible indices for next apple that do not coincide with existing apple index and snake location
-    const appleOptions = boardArr.filter(function(idx){
-      return [...snake.arr, apple.idx].indexOf(idx) === -1
+    const appleOptions = boardArr.filter(function(cell){
+      let occupiedCells = [...snake.body, snake.headIdx, apple.idx]
+      return occupiedCells.indexOf(cell) === -1
     }) 
     // randomly choose from the array  
     apple.idx = appleOptions[Math.floor(Math.random()* appleOptions.length)]
@@ -172,12 +179,14 @@ function renderBoard(){
 // render snake
 function renderSnake(){
     if (gameOver!== 'lose'){
-      snake.arr.forEach(function(idx){
-        cellEls[idx].classList.add('snake')
-      })
+      // if (!gameOver){
+        let snakeArray = [...snake.body, snake.headIdx]
+        snakeArray.forEach(function(idx){
+          cellEls[idx].classList.add('snake')
+        })
 
-      if (gameInProgress) {
-        cellEls[snake.last].classList.remove('snake')
+      if (gameInProgress){
+          cellEls[snake.last].classList.remove('snake')
       }
   }
 }
@@ -199,7 +208,7 @@ function checkForLoss(){
   // if snake is moving off board, game over!
   // if snake's head overlaps with it's body, game over
     if (border[snake.direction].some((idx) => idx === snake.headIdx) ||
-    snake.arr.some((segment) => segment === snake.headIdx)){ //BUG
+    snake.body.some((segment) => segment === snake.headIdx)){ //BUG
       gameOver = 'lose'
       console.log('you lost')
       clearInterval(timerIntervalId)
