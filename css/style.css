@@ -19,30 +19,95 @@ body {
 
   /* align-content and justify-content */
   place-content: center; 
+
 }
 
 .cell {
   background-color: #674743;
+  border: 1px solid #6e4c47;
 }
 .apple {
-  /* color: red; */
-  /* background-color: red; */
   background-image: url('/assets/target.png');
+  /* opacity: 0.5; */
   background-size: 40px;
-  border-radius: 50%
+  border-radius: 60%;
+}
+
+@keyframes pulsate {
+  100% {
+    /* Larger blur radius */
+    box-shadow:
+      0 0 4px #b0cb4a,
+      0 0 11px #b0cb4a,
+      0 0 19px #b0cb4a,
+      0 0 40px #b0cb4a,
+      0 0 80px #b0cb4a,
+      0 0 90px #b0cb4a,
+      0 0 100px #b0cb4a,
+      0 0 120px #b0cb4a;
+  } 0% {
+    /* A slightly smaller blur radius */
+    box-shadow:
+      0 0 4px #b0cb4a,
+      0 0 10px #b0cb4a,
+      0 0 18px #b0cb4a,
+      0 0 38px #b0cb4a,
+      0 0 73px #b0cb4a,
+      0 0 80px #b0cb4a,
+      0 0 94px #b0cb4a,
+      0 0 110px #b0cb4a;
+  }
+}
+
+.snake{
+  /* border: 1px solid #b0cb4a; */
 }
 
 .snake.body {
   /* color: white; */
-  background-color: #b0cb4a;
+  background-color: #556129;
+  
+  /* offset-x | offset-y | blur-radius |  spread-radius | color */
+
+  box-shadow:
+  0 0 4px #fff,
+  0 0 11px #fff,
+  0 0 19px #fff,
+  0 0 40px #556129,
+  0 0 80px #556129,
+  0 0 90px #556129,
+  0 0 100px #556129,
+  0 0 120px #556129;
+  
+  /* border-radius: 10% */
+  /* animation-name: pulsate;
+  animation-duration: 0.1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate; */
 }
 
 .snake.head {
   background-image: url('/assets/snakeHead.jpeg');
   background-size: 40px;
-  /* transform: rotate(180deg) */
+  /* border-radius: 0px 0px 30px 30px; */
 }
 
 #reset {
   margin-top: 20px;
+}
+
+
+
+what {
+    /* x offset, y offset, blur size, spread size, color */
+    box-shadow:
+    inset 0 0 50px #fff,      /* inner white */
+    inset 20px 0 80px #f0f,   /* inner left magenta short */
+    inset -20px 0 80px #0ff,  /* inner right cyan short */
+    inset 20px 0 300px #f0f,  /* inner left magenta broad */
+    inset -20px 0 300px #0ff, /* inner right cyan broad */
+    0 0 50px #fff,            /* outer white */
+    -10px 0 80px #f0f,        /* outer left magenta */
+    10px 0 80px #0ff;         /* outer right cyan */
 }

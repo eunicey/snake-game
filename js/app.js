@@ -235,7 +235,7 @@ function renderApple(){
     cellEls[apple.idx].classList.add('apple')
 
     // Remove CSS for previous apple (if it exists)
-    if (apple.last) {
+    if (apple.hasOwnProperty('last')) {
       cellEls[apple.last].classList.remove('apple')
     }
 
