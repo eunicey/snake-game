@@ -41,6 +41,9 @@ const boardEl = document.querySelector('.board')
 const messageEl = document.querySelector('.message')
 const scoreEl = document.querySelector('.score')
 
+const eatSound = new Audio('../assets/homerEats.wav')
+const hurtSound = new Audio('../assets/HomerDoh.mp3')
+
 /*----------------------------- Event Listeners -----------------------------*/
 
 addEventListener('keydown', handleKeyPress) 
@@ -216,6 +219,11 @@ function renderApple(){
     // Remove CSS for previous apple (if it exists)
     if (apple.last) {
       cellEls[apple.last].classList.remove('apple')
+    }
+
+    if (snake.grow){
+      eatSound.volume = .1
+      eatSound.play()
     }
   }
 }
