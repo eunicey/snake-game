@@ -6,7 +6,7 @@ const cellSz = '40px' //height and width
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
-const speed = 500 //ms
+const speed = 250 //ms
 
 const motionRules = {
   up : {
@@ -205,7 +205,10 @@ function renderSnake(){
       if (gameOver!== 'lose'){
         cellEls[snake.headIdx].classList.add('snake')
         cellEls[snake.last].classList.remove('snake')
-      } 
+      } else {
+        hurtSound.volume = 0.1
+        hurtSound.play()
+      }
     }
   }
 
