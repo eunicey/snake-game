@@ -1,3 +1,6 @@
+body {
+  background-position: center center;
+}
 
 .board {
   display: grid;
