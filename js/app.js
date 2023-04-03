@@ -12,22 +12,26 @@ const motionRules = {
   up : {
     oppDirection : 'down',
     idxAdd : -1*cellsInRowCol,
-    border: createArray(0, 1, cellsInRowCol)
+    border: createArray(0, 1, cellsInRowCol),
+    headOrient: 180,
   },
   down : {
     oppDirection : 'up',
     idxAdd : cellsInRowCol,
-    border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol)
+    border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
+    headOrient: 0,
   },
   left : {
     oppDirection : 'right',
     idxAdd : -1,
-    border: createArray(0, cellsInRowCol, cellsInRowCol)
+    border: createArray(0, cellsInRowCol, cellsInRowCol),
+    headOrient: 90,
   },
   right : {
     oppDirection : 'left',
     idxAdd : 1,
-    border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol)
+    border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
+    headOrient: 270,
   }
 }
 
@@ -57,7 +61,7 @@ initialize()
 // Initialize Game State
 function initialize(){
   snake= {
-    headIdx : 27, //should this be a constant?
+    headIdx : 26, //should this be a constant?
     glowIdx: 0,
     bodyLength : 2, //should this be a constant b/c it doesn't change?
     grow: false,
@@ -200,15 +204,25 @@ function renderSnake(){
       // snakeArray.forEach(function(idx){
       //   cellEls[idx].classList.add('snake')
       // })
+      cellEls[snake.headIdx].classList.add('snake','head')
+      cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+
       snake.body.forEach(function(idx){
         cellEls[idx].classList.add('snake','body')
       })
-      cellEls[snake.headIdx].classList.add('snake','head')
+
     
-    // update CSS for snake head and tail if player didn't lose
+    // update CSS for snake head and tail if game in progress and player didn't lose
     } else {
       if (gameOver!== 'lose'){
+
         cellEls[snake.headIdx].classList.add('snake', 'head')
+        cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+
+        cellEls[snake.body[snake.body.length-1]].removeAttribute('style')
+        cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
+        
+
         cellEls[snake.last].classList.remove('snake', 'body')
       }
     }
