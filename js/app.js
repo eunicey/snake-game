@@ -196,16 +196,20 @@ function renderSnake(){
 
     // render full snake during initialization
     if (!gameInProgress){
-      const snakeArray = [...snake.body, snake.headIdx]
-      snakeArray.forEach(function(idx){
-        cellEls[idx].classList.add('snake')
+      // const snakeArray = [...snake.body, snake.headIdx]
+      // snakeArray.forEach(function(idx){
+      //   cellEls[idx].classList.add('snake')
+      // })
+      snake.body.forEach(function(idx){
+        cellEls[idx].classList.add('snake','body')
       })
+      cellEls[snake.headIdx].classList.add('snake','head')
     
     // update CSS for snake head and tail if player didn't lose
     } else {
       if (gameOver!== 'lose'){
-        cellEls[snake.headIdx].classList.add('snake')
-        cellEls[snake.last].classList.remove('snake')
+        cellEls[snake.headIdx].classList.add('snake', 'head')
+        cellEls[snake.last].classList.remove('snake', 'body')
       }
     }
   }

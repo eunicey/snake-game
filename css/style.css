@@ -34,12 +34,16 @@ body {
 
 /* img */
 
-.cell.snake {
+.cell.snake.body {
   /* color: white; */
-  background-color: green;
+  background-color: #b0cb4a;
 }
 
-
+.cell.snake.head {
+  background-image: url('/assets/snakeHead.jpeg');
+  background-size: 40px;
+  transform: rotate(180deg)
+}
 
 #reset {
   margin-top: 20px;
