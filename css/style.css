@@ -1,11 +1,14 @@
 body {
-  background-position: center center;
+
 }
 
 .board {
   display: grid;
-  grid-template-rows: repeat(5, auto);
-  grid-template-columns: repeat(5, auto);
+  /* grid-template-rows: repeat(10, auto);
+  grid-template-columns: repeat(10, auto); */
+  /* to place child elements into the grid */
+  /* grid-column: */
+  /* grid-row */
   background-color: green;
   text-align: center;
   color: black;

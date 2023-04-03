@@ -1,5 +1,6 @@
 /*-------------------------------- Constants --------------------------------*/
-const totalCells = 50
+const rowNcolCount = 10 //must be square
+const totalCells = rowNcolCount ** 2
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
@@ -185,6 +186,8 @@ function updateApple(){
 
 // Render Board
 function renderBoard(){
+  boardEl.style.gridTemplateRows = `repeat(${rowNcolCount},auto)`
+  boardEl.style.gridTemplateColumns = `repeat(${rowNcolCount},auto)`
 
   for (let i=0; i< totalCells; i++) {
     const cell = document.createElement('div'); //can this not be reused?
