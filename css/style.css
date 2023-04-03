@@ -13,15 +13,23 @@ body {
   /* text-align: center; */
   /* color: black; */
   /* grid-gap: 0vmin; */
+
+  /* justify-items and align-items */
+  place-items: stretch;
+
+  /* align-content and justify-content */
+  place-content: center; 
 }
 
 .cell {
-  background-color: black;
+  background-color: #674743;
 }
 .cell.apple {
   /* color: red; */
   /* background-color: red; */
   background-image: url('/assets/target.png');
+  background-size: 40px;
+  border-radius: 50%
 }
 
 /* img */

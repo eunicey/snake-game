@@ -2,7 +2,7 @@
 const cellsInRowCol = 10 //must be square
 const totalCells = cellsInRowCol ** 2
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
-
+const cellSz = '40px' //height and width
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
@@ -175,13 +175,12 @@ function updateApple(){
 
 // Render Board
 function renderBoard(){
-  
-  boardEl.style.gridTemplate= `repeat(${cellsInRowCol},auto) / repeat(${cellsInRowCol},auto)`
+
+  boardEl.style.gridTemplate= `repeat(${cellsInRowCol},${cellSz}) / repeat(${cellsInRowCol},${cellSz})`
 
   for (let i=0; i< totalCells; i++) {
     const cell = document.createElement('div'); //can this not be reused?
     cell.className = 'cell'
-    cell.textContent = i;
     boardEl.appendChild(cell)
   }  
 
