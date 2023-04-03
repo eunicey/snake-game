@@ -1,45 +1,34 @@
 /*-------------------------------- Constants --------------------------------*/
-const rowNcolCount = 10 //must be square
-const totalCells = rowNcolCount ** 2
+const cellsInRowCol = 10 //must be square
+const totalCells = cellsInRowCol ** 2
+const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
+
 const glow = [0, 1, 2, 3, 4, 5]
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
-const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
+
 const speed = 500 //ms
 
 const motionRules = {
   up : {
     oppDirection : 'down',
-    idxAdd : -5,
-    border: []
+    idxAdd : -1*cellsInRowCol,
+    border: createArray(0, 1, cellsInRowCol)
   },
   down : {
     oppDirection : 'up',
-    idxAdd : 5,
-    border: []
+    idxAdd : cellsInRowCol,
+    border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol)
   },
   left : {
     oppDirection : 'right',
     idxAdd : -1,
-    border: []
+    border: createArray(0, cellsInRowCol, cellsInRowCol)
   },
   right : {
     oppDirection : 'left',
     idxAdd : 1,
-    border: []
+    border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol)
   }
-}
-
-for (let i=0; i<=4; i++){
-  motionRules.up.border.push(i)
-}
-for (let i=45; i<=49; i++){
-  motionRules.down.border.push(i)
-}
-for (let i=0; i<=45; i+=5){
-  motionRules.left.border.push(i)
-}
-for (let i=4; i<=49; i+=5){
-  motionRules.right.border.push(i)
 }
 
 /*-------------------------------- Variables --------------------------------*/
@@ -141,7 +130,7 @@ function resetGame(){
 function initializeSnake(){
 
   //create array that represent indices for body
-  snake.body = Array(snake.bodyLength).fill(snake.headIdx - snake.bodyLength).map((x, y) => x + y)
+  snake.body = createArray(snake.headIdx - snake.bodyLength, 1, snake.bodyLength)
 }
 
 // Update Snake Location
@@ -186,8 +175,8 @@ function updateApple(){
 
 // Render Board
 function renderBoard(){
-  boardEl.style.gridTemplateRows = `repeat(${rowNcolCount},auto)`
-  boardEl.style.gridTemplateColumns = `repeat(${rowNcolCount},auto)`
+  boardEl.style.gridTemplateRows = `repeat(${cellsInRowCol},auto)`
+  boardEl.style.gridTemplateColumns = `repeat(${cellsInRowCol},auto)`
 
   for (let i=0; i< totalCells; i++) {
     const cell = document.createElement('div'); //can this not be reused?
@@ -270,4 +259,10 @@ function renderMessage(){
 
 function renderScore(){
   scoreEl.textContent = `${apple.consumed} of ${apple.total}`
+}
+
+/*-------------------------------- Generic Functions  --------------------------------*/
+
+function createArray(init, step, repeat){
+  return Array(repeat).fill(init).map((x, y) => x + y * step) 
 }
