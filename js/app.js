@@ -200,10 +200,7 @@ function renderSnake(){
 
     // render full snake during initialization
     if (!gameInProgress){
-      // const snakeArray = [...snake.body, snake.headIdx]
-      // snakeArray.forEach(function(idx){
-      //   cellEls[idx].classList.add('snake')
-      // })
+
       cellEls[snake.headIdx].classList.add('snake','head')
       cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
@@ -216,13 +213,15 @@ function renderSnake(){
     } else {
       if (gameOver!== 'lose'){
 
+        // add head class to new head location and rotate head
         cellEls[snake.headIdx].classList.add('snake', 'head')
         cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
-        cellEls[snake.body[snake.body.length-1]].removeAttribute('style')
+        // replace old head location with body CSS and remove head styling
         cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
-        
+        cellEls[snake.body[snake.body.length-1]].removeAttribute('style')
 
+        // remove body class in previous tail location
         cellEls[snake.last].classList.remove('snake', 'body')
       }
     }
