@@ -9,20 +9,26 @@ body {
   /* to place child elements into the grid */
   /* grid-column: */
   /* grid-row */
-  background-color: green;
-  text-align: center;
-  color: black;
+  background-color: black;
+  /* text-align: center; */
+  /* color: black; */
   /* grid-gap: 0vmin; */
 }
 
+.cell {
+  background-color: black;
+}
 .cell.apple {
-  color: red;
+  /* color: red; */
   /* background-color: red; */
+  background-image: url('/assets/target.png');
 }
 
+/* img */
+
 .cell.snake {
-  color: white;
-  /* background-color: white; */
+  /* color: white; */
+  background-color: green;
 }
 
 

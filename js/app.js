@@ -175,8 +175,8 @@ function updateApple(){
 
 // Render Board
 function renderBoard(){
-  boardEl.style.gridTemplateRows = `repeat(${cellsInRowCol},auto)`
-  boardEl.style.gridTemplateColumns = `repeat(${cellsInRowCol},auto)`
+  
+  boardEl.style.gridTemplate= `repeat(${cellsInRowCol},auto) / repeat(${cellsInRowCol},auto)`
 
   for (let i=0; i< totalCells; i++) {
     const cell = document.createElement('div'); //can this not be reused?
