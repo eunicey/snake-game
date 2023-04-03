@@ -42,7 +42,8 @@ const messageEl = document.querySelector('.message')
 const scoreEl = document.querySelector('.score')
 
 const eatSound = new Audio('../assets/homerEats.wav')
-const hurtSound = new Audio('../assets/HomerDoh.mp3')
+const loseSound = new Audio('../assets/homerDoh.mp3')
+const winSound = new Audio('../assets/homerHappy.mp3')
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -205,9 +206,6 @@ function renderSnake(){
       if (gameOver!== 'lose'){
         cellEls[snake.headIdx].classList.add('snake')
         cellEls[snake.last].classList.remove('snake')
-      } else {
-        hurtSound.volume = 0.1
-        hurtSound.play()
       }
     }
   }
@@ -261,6 +259,13 @@ function renderMessage(){
     message = 'Press any arrow key to begin!'
   } else if (gameOver) {
     message = `You ${gameOver}!`
+    if (gameOver === 'win'){
+      winSound.volume = 0.1
+      winSound.play()
+    } else {
+      loseSound.volume = 0.1
+      loseSound.play()
+    }
   } else {
     message = 'placeholder'
   }
