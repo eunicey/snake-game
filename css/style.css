@@ -26,7 +26,7 @@ body {
   background-color: #674743;
   border: 1px solid #6e4c47;
 }
-.apple {
+.donut {
   background-image: url('/assets/target.png');
   /* opacity: 0.5; */
   background-size: 40px;
@@ -60,16 +60,28 @@ body {
 }
 
 .snake{
-  /* border: 1px solid #b0cb4a; */
+  /* border: 3px solid #fad662; */
+  border-radius: 20%
 }
 
 .snake.body {
-  /* color: white; */
-  background-color: #556129;
+  /* background-color: #556129;
+  border: 1px solid #fad662; */
+  /* border-radius: 20% */
   
-  /* offset-x | offset-y | blur-radius |  spread-radius | color */
+  background: #d0f0dd;
+  box-shadow: 
+    0px 0px 0 #40ff22,
+    0px 0px 4px #30ff1f,
+    0px 0px 8px #20ff1b,
+    0px 0px 16px #10ff18;
+  border-radius: 4px;
+  /* position: absolute; */
 
-  box-shadow:
+  /* width: 4px; */
+
+  /* offset-x | offset-y | blur-radius |  spread-radius | color */
+  /* box-shadow:
   0 0 4px #fff,
   0 0 11px #fff,
   0 0 19px #fff,
@@ -77,14 +89,21 @@ body {
   0 0 80px #556129,
   0 0 90px #556129,
   0 0 100px #556129,
-  0 0 120px #556129;
+  0 0 120px #556129; */
   
   /* border-radius: 10% */
-  /* animation-name: pulsate;
-  animation-duration: 0.1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate; */
+  animation-name: right;
+  animation-duration: 2s;
+  /* animation-timing-function: ease-in-out; */
+  /* animation-iteration-count: infinite; */
+  /* animation-direction: alternate; */
+}
+
+@keyframes right{
+  0%  {height: 0; top: 0; left: 96px;}
+  40% {height: 0; top: 0; left: 96px;}
+  60% {height: 100px; top: 0; left: 96px;}
+  80% {height: 0; top: 100px;left: 96px;}
 }
 
 .snake.head {

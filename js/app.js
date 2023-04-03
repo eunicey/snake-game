@@ -36,7 +36,7 @@ const motionRules = {
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let apple, snake, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message
+let donut, snake, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message
 
 /*------------------------ Cached Element References ------------------------*/
 
@@ -67,7 +67,7 @@ function initialize(){
     grow: false,
   }
 
-  apple = {
+  donut = {
     idx: 29, //should this be a constant?
     consumed: 0,
     total: 5, //should this be a constant b/c it doesn't change?
@@ -86,7 +86,7 @@ function render(){
   renderScore()
   renderMessage()
   renderSnake()
-  renderApple()
+  renderDonut()
 }
 
 // Run Game
@@ -94,7 +94,7 @@ function startGame(){
   timerIntervalId= setInterval(function(){
     checkForLoss()
     updateSnake()
-    updateApple()
+    updateDonut()
     checkForWin()
     render()
   }, speed)
@@ -127,8 +127,8 @@ function handleKeyPress(evt){
 
 function resetGame(){
 
-  // remove all apple and snake classes
-  boardEl.querySelectorAll('.apple, .snake').forEach(el => el.classList.remove('apple','snake'))
+  // remove all donut and snake classes
+  boardEl.querySelectorAll('.donut, .snake').forEach(el => el.classList.remove('donut','snake'))
   initialize()
 }
 
@@ -154,22 +154,22 @@ function updateSnake(){
     snake.headIdx += motionRules[direction].idxAdd
 }
 
-// Update Apple Location
-function updateApple(){
+// Update Donut Location
+function updateDonut(){
 
-  // if snake head overlaps with apple location:
-  if (snake.headIdx === apple.idx){
+  // if snake head overlaps with donut location:
+  if (snake.headIdx === donut.idx){
 
-    // increase apple consumed count
-    ++apple.consumed
+    // increase donut consumed count
+    ++donut.consumed
 
-    // store existing location of apple
-    apple.last = apple.idx
+    // store existing location of donut
+    donut.last = donut.idx
 
-    // update apple location so that it does not coincide with current apple and snake locations
-    const occupiedCells = [...snake.body, snake.headIdx, apple.idx]
+    // update donut location so that it does not coincide with current donut and snake locations
+    const occupiedCells = [...snake.body, snake.headIdx, donut.idx]
     const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
-    apple.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
+    donut.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
 
     // snake grows = snake tail location stays the same 
     snake.grow = true
@@ -227,16 +227,16 @@ function renderSnake(){
     }
   }
 
-// Render Apple
-function renderApple(){
+// Render Donut
+function renderDonut(){
 
   if (!gameOver){
 
-    cellEls[apple.idx].classList.add('apple')
+    cellEls[donut.idx].classList.add('donut')
 
-    // Remove CSS for previous apple (if it exists)
-    if (apple.hasOwnProperty('last')) {
-      cellEls[apple.last].classList.remove('apple')
+    // Remove CSS for previous target (if it exists)
+    if (donut.hasOwnProperty('last')) {
+      cellEls[donut.last].classList.remove('donut')
     }
 
     if (snake.grow){
@@ -259,10 +259,10 @@ function checkForLoss(){
   }
 }
 
-// Check if player won - all apples consumed
+// Check if player won - all donuts consumed
 function checkForWin(){
 
-  if (apple.consumed === apple.total){
+  if (donut.consumed === donut.total){
     gameOver = 'win'
     console.log('you won')
     clearInterval(timerIntervalId)
@@ -290,7 +290,7 @@ function renderMessage(){
 }
 
 function renderScore(){
-  scoreEl.textContent = `${apple.consumed} of ${apple.total}`
+  scoreEl.textContent = `${donut.consumed} of ${donut.total}`
 }
 
 /*-------------------------------- Generic Functions  --------------------------------*/
