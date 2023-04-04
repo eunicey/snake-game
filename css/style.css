@@ -24,8 +24,11 @@ body {
 
 .cell {
   background-color: #674743;
+}
+.cell:not(.snake){
   border: 1px solid #6e4c47;
 }
+
 .donut {
   background-image: url('/assets/target.png');
   /* opacity: 0.5; */
@@ -33,77 +36,48 @@ body {
   border-radius: 60%;
 }
 
-@keyframes pulsate {
-  100% {
-    /* Larger blur radius */
-    box-shadow:
-      0 0 4px #b0cb4a,
-      0 0 11px #b0cb4a,
-      0 0 19px #b0cb4a,
-      0 0 40px #b0cb4a,
-      0 0 80px #b0cb4a,
-      0 0 90px #b0cb4a,
-      0 0 100px #b0cb4a,
-      0 0 120px #b0cb4a;
-  } 0% {
-    /* A slightly smaller blur radius */
-    box-shadow:
-      0 0 4px #b0cb4a,
-      0 0 10px #b0cb4a,
-      0 0 18px #b0cb4a,
-      0 0 38px #b0cb4a,
-      0 0 73px #b0cb4a,
-      0 0 80px #b0cb4a,
-      0 0 94px #b0cb4a,
-      0 0 110px #b0cb4a;
-  }
-}
-
-.snake{
+.snake {
   /* border: 3px solid #fad662; */
-  border-radius: 20%
+  /* border-radius: 20% */
 }
 
 .snake.body {
-  /* background-color: #556129;
-  border: 1px solid #fad662; */
-  /* border-radius: 20% */
-  
-  background: #d0f0dd;
-  box-shadow: 
-    0px 0px 0 #40ff22,
-    0px 0px 4px #30ff1f,
-    0px 0px 8px #20ff1b,
-    0px 0px 16px #10ff18;
-  border-radius: 4px;
-  /* position: absolute; */
+  /* background: #ffd521; */
+  background: linear-gradient(90deg, #ffd521, #ebd81e, #ffd521);
+  background: linear-gradient(90deg, #ffd521, #d8db1b, #ffd521);
+  background: linear-gradient(90deg, #ffd521, #c4df19, #ffd521);
+  background: linear-gradient(90deg, #ffd521, #b1e216, #ffd521);
+  /* background: linear-gradient(90deg, #ffd521, #8ae811, #ffd521); */
+  /* background: linear-gradient(90deg, #ffd521, #63ef0b, #ffd521); */
+  background: linear-gradient(90deg, #ffd521, #15fc00, #ffd521);
 
-  /* width: 4px; */
+  background-size: 400%;
+  /* animation: animate 5s linear alternate; */
 
   /* offset-x | offset-y | blur-radius |  spread-radius | color */
-  /* box-shadow:
-  0 0 4px #fff,
-  0 0 11px #fff,
-  0 0 19px #fff,
-  0 0 40px #556129,
-  0 0 80px #556129,
-  0 0 90px #556129,
-  0 0 100px #556129,
-  0 0 120px #556129; */
+  /* box-shadow:  0px 0px 40px 5px #30ff1f; */
   
   /* border-radius: 10% */
-  animation-name: right;
-  animation-duration: 2s;
-  /* animation-timing-function: ease-in-out; */
-  /* animation-iteration-count: infinite; */
+
+  animation-name: animate;
+  animation-duration: 5s;
+  animation-timing-function: linear; 
+  animation-iteration-count: infinite;
   /* animation-direction: alternate; */
+  /* animation-fill-mode: backwards; */
 }
 
-@keyframes right{
-  0%  {height: 0; top: 0; left: 96px;}
-  40% {height: 0; top: 0; left: 96px;}
-  60% {height: 100px; top: 0; left: 96px;}
-  80% {height: 0; top: 100px;left: 96px;}
+@keyframes animate {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 400%;
+  }
+}
+
+.snake.tail {
+  border-radius: 30% ;
 }
 
 .snake.head {
