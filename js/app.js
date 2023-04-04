@@ -61,8 +61,8 @@ initialize()
 function initialize(){
   homer= {
     headIdx : 26,
+    body: [25],
     glowIdx: 0,
-    bodyLength : 2, //should this be a constant b/c it doesn't change?
     grow: false,
   }
 
@@ -76,7 +76,6 @@ function initialize(){
   gameInProgress = false
   gameOver = false
 
-  initializeHomer()
   render()
 }
 
@@ -136,13 +135,6 @@ function resetGame(){
 }
 
 /*-------------------------------- Update Model  --------------------------------*/
-
-// Initialize Homer
-function initializeHomer(){
-
-  //create array that represent indices for body
-  homer.body = createArray(homer.headIdx - homer.bodyLength, 1, homer.bodyLength)
-}
 
 // Update Homer Location
 function updateHomer(){
