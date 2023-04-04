@@ -67,7 +67,7 @@ h3 {
 
 .donut {
   background-image: url('/assets/donut.png');
-  background-size: 40px;
+  background-size: 3vmin;
 }
 
 .homer {
@@ -117,7 +117,7 @@ h3 {
 .homer.head {
   background-color: #674743;
   background-image: url('/assets/homerHead.jpeg');
-  background-size: 40px;
+  background-size: 3vmin;
   border-radius: 0px 30px 30px 0px;
 }
 
