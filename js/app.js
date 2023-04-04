@@ -3,7 +3,7 @@ const cellsInRowCol = 10 //must be square
 const totalCells = cellsInRowCol ** 2
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
 const cellSz = '40px' //height and width
-const glow = [0, 1, 2, 3, 4, 5]
+const glow = ['#ffd521', '#ebd81e', '#d8db1b', '#c4df19', '#b1e216', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
 const speed = 250 //ms
@@ -213,16 +213,18 @@ function renderSnake(){
     } else {
       if (gameOver!== 'lose'){
 
-        // add head class to new head location and rotate head
+        // add '.head' to new head location and rotate head
         cellEls[snake.headIdx].classList.add('snake', 'head')
         cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
-        // replace old head location with body CSS and remove head styling
+        // replace old head location with body CSS and update styling for body
         cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
-        cellEls[snake.body[snake.body.length-1]].removeAttribute('style')
+        cellEls[snake.body[snake.body.length-1]].style.transform =''
+        cellEls[snake.body[snake.body.length-1]].style.background = `linear-gradient(90deg, #ffd521, ${glow[snake.glowIdx]}, #ffd521)`
 
         // remove body class in previous tail location
         cellEls[snake.last].classList.remove('snake', 'body')
+        cellEls[snake.last].removeAttribute('style')
       }
     }
   }

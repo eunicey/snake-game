@@ -42,14 +42,14 @@ body {
 }
 
 .snake.body {
-  /* background: #ffd521; */
-  background: linear-gradient(90deg, #ffd521, #ebd81e, #ffd521);
-  background: linear-gradient(90deg, #ffd521, #d8db1b, #ffd521);
-  background: linear-gradient(90deg, #ffd521, #c4df19, #ffd521);
-  background: linear-gradient(90deg, #ffd521, #b1e216, #ffd521);
+  background: #ffd521;
+  /* background: linear-gradient(90deg, #ffd521, #ebd81e, #ffd521); */
+  /* background: linear-gradient(90deg, #ffd521, #d8db1b, #ffd521); */
+  /* background: linear-gradient(90deg, #ffd521, #c4df19, #ffd521); */
+  /* background: linear-gradient(90deg, #ffd521, #b1e216, #ffd521); */
   /* background: linear-gradient(90deg, #ffd521, #8ae811, #ffd521); */
   /* background: linear-gradient(90deg, #ffd521, #63ef0b, #ffd521); */
-  background: linear-gradient(90deg, #ffd521, #15fc00, #ffd521);
+  /* background: linear-gradient(90deg, #ffd521, #15fc00, #ffd521); */
 
   background-size: 400%;
   /* animation: animate 5s linear alternate; */
