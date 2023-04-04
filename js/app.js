@@ -54,7 +54,7 @@ const winSound = new Audio('../assets/homerHappy.mp3')
 addEventListener('keydown', handleKeyPress) 
 resetBtnEl.addEventListener('click', resetGame)
 
-/*-------------------------------- Primary Functions --------------------------------*/
+/*-------------------------Primary Functions --------------------------------*/
 renderBoard() //Okay that this is outside of initialize? don't want to re-render with reset.
 initialize()
 
@@ -128,7 +128,11 @@ function handleKeyPress(evt){
 function resetGame(){
 
   // remove all donut and homer classes
-  boardEl.querySelectorAll('.donut, .homer').forEach(el => el.classList.remove('donut','homer'))
+  boardEl.querySelectorAll('.donut, .homer').forEach(function(el){
+    el.classList.value = 'cell'
+    el.removeAttribute('style')
+  })
+  clearInterval(timerIntervalId)
   initialize()
 }
 
@@ -253,7 +257,6 @@ function checkForLoss(){
   if (motionRules[direction].border.some((idx) => idx === homer.headIdx) ||
   homer.body.some((segment) => segment === homer.headIdx)){
     gameOver = 'lose'
-    console.log('you lost')
     clearInterval(timerIntervalId)
   }
 }
@@ -263,7 +266,6 @@ function checkForWin(){
 
   if (donut.consumed === donut.total){
     gameOver = 'win'
-    console.log('you won')
     clearInterval(timerIntervalId)
   }
 }
@@ -292,7 +294,7 @@ function renderScore(){
   scoreEl.textContent = `${donut.consumed} of ${donut.total}`
 }
 
-/*-------------------------------- Generic Functions  --------------------------------*/
+/*----------------------  Generic Functions  ---------------------------*/
 
 function createArray(init, step, repeat){
   return Array(repeat).fill(init).map((x, y) => x + y * step) 
