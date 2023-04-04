@@ -17,33 +17,44 @@ body {
   display: grid;
   grid-template-areas: "header1 score" "header1 board" "header2 board" "header2 button";
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: 1fr 2fr 2fr 1fr;
-  /* align-items: center; */
-  /* justify-content: center; */
+  grid-template-rows: 1fr auto auto 1fr;
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 5rem;
   grid-area: header1;
-  margin: 6vh auto 0 auto;
+  margin-top: 12vh;
+  text-align: center;
 }
 h1 > img {
   display: inline-block;
-  margin: 0 20px;
+  margin: auto 20px;
   height: 1em;
 }
 
 h2 {
-  font-size: 2rem;
-  /* height: 2vh; */
+  font-size: 3rem;
+  margin-left: 2vw;
+  text-align: center;
   grid-area: header2;
 }
 
 h3 {
   font-size: 2rem;
   grid-area: score;
-  margin: 0 auto;
+  margin: auto auto 20px auto;
 }
+
+#reset {
+  border-radius: 30px;
+  width: 8vw;
+  height: 6vh;
+  font-size: 1.5rem;
+  grid-area: button;
+  margin: 20px auto;
+  font-family: 'simpsons';
+}
+
 
 .board {
   grid-area: board;
@@ -78,11 +89,6 @@ h3 {
 .donut {
   background-image: url('/assets/donut.png');
   background-size: 3vmin;
-}
-
-.homer {
-  /* border: 3px solid #fad662; */
-  /* border-radius: 20% */
 }
 
 .homer.body {
@@ -131,16 +137,6 @@ h3 {
   border-radius: 0px 30px 30px 0px;
 }
 
-#reset {
-
-  border-radius: 30px;
-  width: 10vw;
-  height: 4vh;
-  font-size: 1rem;
-  grid-area: button;
-  margin: 0 auto;
-  /* align-items: end; */
-}
 
 
 what {
