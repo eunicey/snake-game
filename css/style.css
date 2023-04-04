@@ -14,14 +14,23 @@ body {
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 4em;
 }
 h1 > img {
   display: inline-block;
   margin: 0 20px;
-  /* width: 60px; */
-  height: 60px;
+  height: 1em;
 }
+
+h2 {
+  font-size: 3em;
+  height: 2vh;
+}
+
+h3 {
+  font-size: 2em;
+}
+
 
 .board {
   display: grid;

@@ -283,7 +283,7 @@ function renderMessage(){
       loseSound.play()
     }
   } else {
-    message = 'placeholder'
+    message = ''
   }
   messageEl.textContent = message
 }
