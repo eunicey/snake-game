@@ -1,12 +1,26 @@
 body {
   background-color: black;
   color: white;
-  font-family: 'simpsons';
+  font-family: 'simpsons', Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 @font-face{
   font-family: 'simpsons';
   src: local("Trickster"), url("/assets/simpsonFont.otf")
+}
+
+h1 {
+  font-size: 60px;
+}
+h1 > img {
+  display: inline-block;
+  margin: 0 20px;
+  /* width: 60px; */
+  height: 60px;
 }
 
 .board {
