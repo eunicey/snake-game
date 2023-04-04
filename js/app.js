@@ -2,7 +2,7 @@
 const cellsInRowCol = 20 //must be square
 const totalCells = cellsInRowCol ** 2
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
-const cellSz = '40px' //height and width
+const cellSz = '3vmin' //height and width
 const glow = ['#ffd521', '#ebd81e', '#d8db1b', '#c4df19', '#b1e216', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
