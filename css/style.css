@@ -25,7 +25,7 @@ body {
 .cell {
   background-color: #674743;
 }
-.cell:not(.snake){
+.cell:not(.homer){
   border: 1px solid #6e4c47;
 }
 
@@ -34,12 +34,12 @@ body {
   background-size: 40px;
 }
 
-.snake {
+.homer {
   /* border: 3px solid #fad662; */
   /* border-radius: 20% */
 }
 
-.snake.body {
+.homer.body {
   background: #ffd521;
   /* background: linear-gradient(90deg, #ffd521, #ebd81e, #ffd521); */
   /* background: linear-gradient(90deg, #ffd521, #d8db1b, #ffd521); */
@@ -74,13 +74,13 @@ body {
   }
 }
 
-.snake.tail {
+.homer.tail {
   border-radius: 30% ;
 }
 
-.snake.head {
+.homer.head {
   background-color: #674743;
-  background-image: url('/assets/snakeHead.jpeg');
+  background-image: url('/assets/homerHead.jpeg');
   background-size: 40px;
   border-radius: 0px 30px 30px 0px;
 

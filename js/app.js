@@ -36,7 +36,7 @@ const motionRules = {
 }
 
 /*-------------------------------- Variables --------------------------------*/
-let donut, snake, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message
+let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message
 
 /*------------------------ Cached Element References ------------------------*/
 
@@ -60,7 +60,7 @@ initialize()
 
 // Initialize Game State
 function initialize(){
-  snake= {
+  homer= {
     headIdx : 26, //should this be a constant?
     glowIdx: 0,
     bodyLength : 2, //should this be a constant b/c it doesn't change?
@@ -77,7 +77,7 @@ function initialize(){
   gameInProgress = false
   gameOver = false
 
-  initializeSnake()
+  initializeHomer()
   render()
 }
 
@@ -85,7 +85,7 @@ function initialize(){
 function render(){
   renderScore()
   renderMessage()
-  renderSnake()
+  renderHomer()
   renderDonut()
 }
 
@@ -93,7 +93,7 @@ function render(){
 function startGame(){
   timerIntervalId= setInterval(function(){
     checkForLoss()
-    updateSnake()
+    updateHomer()
     updateDonut()
     checkForWin()
     render()
@@ -127,38 +127,38 @@ function handleKeyPress(evt){
 
 function resetGame(){
 
-  // remove all donut and snake classes
-  boardEl.querySelectorAll('.donut, .snake').forEach(el => el.classList.remove('donut','snake'))
+  // remove all donut and homer classes
+  boardEl.querySelectorAll('.donut, .homer').forEach(el => el.classList.remove('donut','homer'))
   initialize()
 }
 
 /*-------------------------------- Update Model  --------------------------------*/
 
-// Initialize Snake
-function initializeSnake(){
+// Initialize Homer
+function initializeHomer(){
 
   //create array that represent indices for body
-  snake.body = createArray(snake.headIdx - snake.bodyLength, 1, snake.bodyLength)
+  homer.body = createArray(homer.headIdx - homer.bodyLength, 1, homer.bodyLength)
 }
 
-// Update Snake Location
-function updateSnake(){
+// Update Homer Location
+function updateHomer(){
 
     // add existing location to body array
-    snake.body.push(snake.headIdx)
+    homer.body.push(homer.headIdx)
 
-    // remove the first index of the snake body and cache it
-    snake.grow ? snake.grow = false : snake.last = snake.body.shift()
+    // remove the first index of the homer body and cache it
+    homer.grow ? homer.grow = false : homer.last = homer.body.shift()
 
-    // update snake head location
-    snake.headIdx += motionRules[direction].idxAdd
+    // update homer head location
+    homer.headIdx += motionRules[direction].idxAdd
 }
 
 // Update Donut Location
 function updateDonut(){
 
-  // if snake head overlaps with donut location:
-  if (snake.headIdx === donut.idx){
+  // if homer head overlaps with donut location:
+  if (homer.headIdx === donut.idx){
 
     // increase donut consumed count
     ++donut.consumed
@@ -166,16 +166,16 @@ function updateDonut(){
     // store existing location of donut
     donut.last = donut.idx
 
-    // update donut location so that it does not coincide with current donut and snake locations
-    const occupiedCells = [...snake.body, snake.headIdx, donut.idx]
+    // update donut location so that it does not coincide with current donut and homer locations
+    const occupiedCells = [...homer.body, homer.headIdx, donut.idx]
     const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
     donut.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
 
-    // snake grows = snake tail location stays the same 
-    snake.grow = true
+    // homer grows = homer tail location stays the same 
+    homer.grow = true
 
-    // increase snake glow level unless at max
-    snake.glowIdx === glow.length ? glow.length : ++snake.glowIdx
+    // increase homer glow level unless at max
+    homer.glowIdx === glow.length ? glow.length : ++homer.glowIdx
   }
 }
 
@@ -195,34 +195,34 @@ function renderBoard(){
   cellEls = document.querySelectorAll('.board > .cell') // can't add this to cached elements?
 }
 
-// Render Snake
-function renderSnake(){
+// Render Homer
+function renderHomer(){
 
   if (!gameInProgress){
 
      // add .head to head location and style it
-    cellEls[snake.headIdx].classList.add('snake','head')
-    cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    cellEls[homer.headIdx].classList.add('homer','head')
+    cellEls[homer.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
     // add .body to body location
-    snake.body.forEach(function(idx){
-      cellEls[idx].classList.add('snake','body')
+    homer.body.forEach(function(idx){
+      cellEls[idx].classList.add('homer','body')
     })
 
   } else if (gameOver!== 'lose'){
 
     // add '.head' to new head location and rotate head
-    cellEls[snake.headIdx].classList.add('snake','head')
-    cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    cellEls[homer.headIdx].classList.add('homer','head')
+    cellEls[homer.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
     
     // replace old head location with body CSS and update styling for body
-    cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
-    cellEls[snake.body[snake.body.length-1]].style.transform =''
-    cellEls[snake.body[snake.body.length-1]].style.background = `linear-gradient(90deg, #ffd521, ${glow[snake.glowIdx]}, #ffd521)`
+    cellEls[homer.body[homer.body.length-1]].classList.replace('head', 'body')
+    cellEls[homer.body[homer.body.length-1]].style.transform =''
+    cellEls[homer.body[homer.body.length-1]].style.background = `linear-gradient(90deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
 
     // remove body class in previous tail location
-    cellEls[snake.last].classList.remove('snake', 'body')
-    cellEls[snake.last].removeAttribute('style')
+    cellEls[homer.last].classList.remove('homer', 'body')
+    cellEls[homer.last].removeAttribute('style')
   }
 }
 
@@ -238,7 +238,7 @@ function renderDonut(){
       cellEls[donut.last].classList.remove('donut')
     }
 
-    if (snake.grow){
+    if (homer.grow){
       eatSound.volume = .1
       eatSound.play()
     }
@@ -248,10 +248,10 @@ function renderDonut(){
 // Check if player lost
 function checkForLoss(){
 
-  // Snake's head overlaps with board border and direction is No-No OR
-  // Snake's head overlaps with body segment
-  if (motionRules[direction].border.some((idx) => idx === snake.headIdx) ||
-  snake.body.some((segment) => segment === snake.headIdx)){
+  // Homer's head overlaps with board border and direction is No-No OR
+  // Homer's head overlaps with body segment
+  if (motionRules[direction].border.some((idx) => idx === homer.headIdx) ||
+  homer.body.some((segment) => segment === homer.headIdx)){
     gameOver = 'lose'
     console.log('you lost')
     clearInterval(timerIntervalId)
