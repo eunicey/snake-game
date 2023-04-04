@@ -1,5 +1,5 @@
 body {
-
+  background-color: black;
 }
 
 .board {
@@ -9,7 +9,7 @@ body {
   /* to place child elements into the grid */
   /* grid-column: */
   /* grid-row */
-  background-color: black;
+  /* background-color: black; */
   /* text-align: center; */
   /* color: black; */
   /* grid-gap: 0vmin; */
@@ -30,10 +30,8 @@ body {
 }
 
 .donut {
-  background-image: url('/assets/target.png');
-  /* opacity: 0.5; */
+  background-image: url('/assets/donut.png');
   background-size: 40px;
-  border-radius: 60%;
 }
 
 .snake {
@@ -81,9 +79,12 @@ body {
 }
 
 .snake.head {
+  background-color: #674743;
   background-image: url('/assets/snakeHead.jpeg');
   background-size: 40px;
-  /* border-radius: 0px 0px 30px 30px; */
+  border-radius: 0px 30px 30px 0px;
+
+
 }
 
 #reset {

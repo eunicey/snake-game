@@ -13,25 +13,25 @@ const motionRules = {
     oppDirection : 'down',
     idxAdd : -1*cellsInRowCol,
     border: createArray(0, 1, cellsInRowCol),
-    headOrient: 180,
+    headOrient: 270,
   },
   down : {
     oppDirection : 'up',
     idxAdd : cellsInRowCol,
     border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
-    headOrient: 0,
+    headOrient: 90,
   },
   left : {
     oppDirection : 'right',
     idxAdd : -1,
     border: createArray(0, cellsInRowCol, cellsInRowCol),
-    headOrient: 90,
+    headOrient: 180,
   },
   right : {
     oppDirection : 'left',
     idxAdd : 1,
     border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
-    headOrient: 270,
+    headOrient: 0,
   }
 }
 
@@ -198,11 +198,11 @@ function renderBoard(){
 // Render Snake
 function renderSnake(){
 
-  // add '.head' to new head location and rotate head
-  cellEls[snake.headIdx].classList.add('snake','head')
-  cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
-
   if (!gameInProgress){
+
+     // add .head to head location and style it
+    cellEls[snake.headIdx].classList.add('snake','head')
+    cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
     // add .body to body location
     snake.body.forEach(function(idx){
@@ -211,6 +211,10 @@ function renderSnake(){
 
   } else if (gameOver!== 'lose'){
 
+    // add '.head' to new head location and rotate head
+    cellEls[snake.headIdx].classList.add('snake','head')
+    cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    
     // replace old head location with body CSS and update styling for body
     cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
     cellEls[snake.body[snake.body.length-1]].style.transform =''
