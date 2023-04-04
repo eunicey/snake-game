@@ -1,5 +1,5 @@
 /*-------------------------------- Constants --------------------------------*/
-const cellsInRowCol = 10 //must be square
+const cellsInRowCol = 20 //must be square
 const totalCells = cellsInRowCol ** 2
 const boardArr = [...Array(totalCells).keys()] // should this go under Initialize?
 const cellSz = '40px' //height and width

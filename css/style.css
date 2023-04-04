@@ -1,5 +1,12 @@
 body {
   background-color: black;
+  color: white;
+  font-family: 'simpsons';
+}
+
+@font-face{
+  font-family: 'simpsons';
+  src: local("Trickster"), url("/assets/simpsonFont.otf")
 }
 
 .board {
