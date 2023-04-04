@@ -198,36 +198,29 @@ function renderBoard(){
 // Render Snake
 function renderSnake(){
 
-    // render full snake during initialization
-    if (!gameInProgress){
+  // add '.head' to new head location and rotate head
+  cellEls[snake.headIdx].classList.add('snake','head')
+  cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
 
-      cellEls[snake.headIdx].classList.add('snake','head')
-      cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+  if (!gameInProgress){
 
-      snake.body.forEach(function(idx){
-        cellEls[idx].classList.add('snake','body')
-      })
+    // add .body to body location
+    snake.body.forEach(function(idx){
+      cellEls[idx].classList.add('snake','body')
+    })
 
-    
-    // update CSS for snake head and tail if game in progress and player didn't lose
-    } else {
-      if (gameOver!== 'lose'){
+  } else if (gameOver!== 'lose'){
 
-        // add '.head' to new head location and rotate head
-        cellEls[snake.headIdx].classList.add('snake', 'head')
-        cellEls[snake.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    // replace old head location with body CSS and update styling for body
+    cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
+    cellEls[snake.body[snake.body.length-1]].style.transform =''
+    cellEls[snake.body[snake.body.length-1]].style.background = `linear-gradient(90deg, #ffd521, ${glow[snake.glowIdx]}, #ffd521)`
 
-        // replace old head location with body CSS and update styling for body
-        cellEls[snake.body[snake.body.length-1]].classList.replace('head', 'body')
-        cellEls[snake.body[snake.body.length-1]].style.transform =''
-        cellEls[snake.body[snake.body.length-1]].style.background = `linear-gradient(90deg, #ffd521, ${glow[snake.glowIdx]}, #ffd521)`
-
-        // remove body class in previous tail location
-        cellEls[snake.last].classList.remove('snake', 'body')
-        cellEls[snake.last].removeAttribute('style')
-      }
-    }
+    // remove body class in previous tail location
+    cellEls[snake.last].classList.remove('snake', 'body')
+    cellEls[snake.last].removeAttribute('style')
   }
+}
 
 // Render Donut
 function renderDonut(){
