@@ -63,7 +63,7 @@ initialize()
 // Initialize Game State
 function initialize(){
   homer= {
-    headIdx : randBoardIdx(motion.left.border),
+    headIdx : randBoardIdx([...motion.left.border, ...motion.right.border]),
     glowIdx: 0,
     grow: false,
   }
