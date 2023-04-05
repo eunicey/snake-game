@@ -62,17 +62,17 @@ initialize()
 
 // Initialize Game State
 function initialize(){
-  homer= {
-    headIdx : randBoardIdx([...motion.left.border, ...motion.right.border]),
-    glowIdx: 0,
-    grow: false,
-  }
-  homer.body = [homer.headIdx-1]
-
   donut = {
     idx: Math.floor(Math.random() * totalCells),
     tally: 0,
   }
+
+  homer= {
+    headIdx : randBoardIdx([...motion.left.border, ...motion.right.border, donut.idx]),
+    glowIdx: 0,
+    grow: false,
+  }
+  homer.body = [homer.headIdx-1]
 
   direction= 'right'
   gameInProgress = false
@@ -121,6 +121,7 @@ function handleKeyPress(evt){
       gameInProgress = true
       startGame()
     }
+    console.log('keypress')
   }
 }
 
@@ -148,6 +149,7 @@ function updateHomer(){
 
     // update homer head location
     homer.headIdx += motion[direction].idxAdd
+    console.log('updateHomer')
 }
 
 // Update Donut Location
@@ -171,6 +173,7 @@ function updateDonut(){
     // increase homer glow level unless at max
     homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
   }
+  console.log('updateDonut')
 }
 
 // Check if player lost
@@ -183,6 +186,7 @@ function checkForLoss(){
     gameOver = true
     clearInterval(timerIntervalId)
   }
+  console.log('checkForLoss')
 }
 
 /*-------------------------------- Update View  --------------------------------*/
@@ -215,6 +219,7 @@ function renderHomer(){
     cellEls[homer.last].classList.remove('homer', 'body')
     cellEls[homer.last].removeAttribute('style')
   }
+  console.log('renderHomer')
 }
 
 // Render Donut
@@ -234,6 +239,7 @@ function renderDonut(){
       eatSound.play()
     }
   }
+  console.log('renderDonut')
 }
 
 // render message
