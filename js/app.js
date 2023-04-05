@@ -44,8 +44,7 @@ let highScore = 0
 const resetBtnEl= document.getElementById('reset')
 const boardEl = document.querySelector('.board')
 const messageEl = document.querySelector('.message')
-const gameScoreEl = document.querySelector('.gameScore')
-const highScoreEl = document.querySelector('.highScore')
+const scoreEl = document.querySelector('.score')
 
 const eatSound = new Audio('../assets/homerEats.wav')
 const loseSound = new Audio('../assets/homerDoh.mp3')
@@ -73,7 +72,6 @@ function initialize(){
   donut = {
     idx: Math.floor(Math.random() * totalCells),
     tally: 0,
-    beatHighScore: false,
   }
 
   direction= 'right'
@@ -94,12 +92,10 @@ function render(){
 // Run Game
 function startGame(){
   timerIntervalId= setInterval(function(){
-
     checkForLoss()
     updateHomer()
     updateDonut()
     render()
-    
   }, speed)
 }
 
@@ -160,12 +156,8 @@ function updateDonut(){
   // if homer head overlaps with donut location:
   if (homer.headIdx === donut.idx){
 
-    // increase donut tally and check if highScore is beat
+    // increase donut tally
     ++donut.tally
-    if (donut.tally> highScore) {
-    highScore = donut.tally
-    donut.beatHighScore = true
-    }
 
     // store existing location of donut to clear CSS
     donut.last = donut.idx
@@ -195,37 +187,20 @@ function checkForLoss(){
 
 /*-------------------------------- Update View  --------------------------------*/
 
-// Render Board
-function renderBoard(){
-
-  boardArr = [...Array(totalCells).keys()]
-
-  boardEl.style.gridTemplate= `repeat(${cellsInRowCol},${cellSz}) / repeat(${cellsInRowCol},${cellSz})`
-
-  for (let i=0; i< totalCells; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell'
-    boardEl.appendChild(cell)
-  }  
-
-  cellEls = document.querySelectorAll('.board > .cell')
-}
-
 // Render Homer
 function renderHomer(){
 
   if (!gameInProgress){
 
-     // add .head to head location and style it
-     updateHead()
+    // add .head to head location and style it
+    updateHead()
 
     // add .body to body location
     homer.body.forEach(function(idx){
       cellEls[idx].classList.add('homer','body')
     })
 
-  } else {
-  // } else if (!gameOver){
+  } else if (!gameOver){
 
     // add '.head' to new head location and rotate head
     updateHead()
@@ -240,9 +215,6 @@ function renderHomer(){
     cellEls[homer.last].classList.remove('homer', 'body')
     cellEls[homer.last].removeAttribute('style')
   }
-  // if (gameOver){
-  //   clearInterval(timerIntervalId)
-  // }
 }
 
 // Render Donut
@@ -270,7 +242,8 @@ function renderMessage(){
   if (!gameInProgress){
     message = 'Press any arrow key to begin!'
   } else if (gameOver) {
-    if (donut.beatHighScore){
+    if (donut.tally> highScore) {
+      highScore = donut.tally
       message = `New High Score! ${highScore}`
       winSound.volume = 0.1
       winSound.play()
@@ -286,11 +259,23 @@ function renderMessage(){
 }
 
 function renderScore(){
-  gameScoreEl.textContent = donut.tally
-  if (gameOver){
-    highScoreEl.textContent = highScore
-  }
+  scoreEl.textContent = donut.tally
+}
 
+// Render Board
+function renderBoard(){
+
+  boardArr = [...Array(totalCells).keys()]
+
+  boardEl.style.gridTemplate= `repeat(${cellsInRowCol},${cellSz}) / repeat(${cellsInRowCol},${cellSz})`
+
+  for (let i=0; i< totalCells; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell'
+    boardEl.appendChild(cell)
+  }  
+
+  cellEls = document.querySelectorAll('.board > .cell')
 }
 
 /*----------------------  Generic Functions  ---------------------------*/

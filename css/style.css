@@ -15,7 +15,7 @@ body {
   font-family: 'simpsons', Arial, Helvetica, sans-serif;
 
   display: grid;
-  grid-template-areas: "title scores" "title board" "message board" "message button";
+  grid-template-areas: "title score" "title board" "message board" "message button";
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr auto auto 1fr;
 }
@@ -39,15 +39,11 @@ h2 {
   text-align: center;
 }
 
-.scores {
-  /* display: inline; */
-  grid-area: scores;
-}
-/* p {
+h3 {
   font-size: 2rem;
-  grid-area: scores;
-  margin: auto auto 20px auto;
-} */
+  grid-area: score;
+  /* margin: auto auto 20px auto; */
+}
 
 #reset {
   border-radius: 30px;
