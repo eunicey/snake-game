@@ -4,6 +4,7 @@ const totalCells = cellsInRowCol ** 2
 const cellSz = '4vmin' //height and width
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+const headDir = "url('/images/homerHead.png')"
 
 // parameters to deal with motion direction
 const motion = {
@@ -12,24 +13,28 @@ const motion = {
     idxAdd : -1*cellsInRowCol,
     border: createArray(0, 1, cellsInRowCol),
     headOrient: 270,
+    curve: '0 0 30px 30px'
   },
   down : {
     oppDirection : 'up',
     idxAdd : cellsInRowCol,
     border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
     headOrient: 90,
+    curve: '30px 30px 0 0'
   },
   left : {
     oppDirection : 'right',
     idxAdd : -1,
     border: createArray(0, cellsInRowCol, cellsInRowCol),
     headOrient: 180,
+    curve: '0 30px 30px 0',
   },
   right : {
     oppDirection : 'left',
     idxAdd : 1,
     border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
     headOrient: 0,
+    curve: '30px 0 0 30px',
   }
 }
 
@@ -63,6 +68,10 @@ initialize()
 // Initialize Game State
 function initialize(){
 
+  gameInProgress = false
+  gameOver = false
+  direction= 'right'
+
   donut = {
     idx: Math.floor(Math.random() * totalCells),
     tally: 0,
@@ -72,13 +81,12 @@ function initialize(){
     headIdx : randBoardIdx([...motion.left.border, ...motion.right.border, donut.idx]),
     glowIdx : 0,
     grow : false,
-    speed : 250
+    speed : 250,
+    bodyDir: [direction],
   }
-  homer.body = [homer.headIdx-1]
+  homer.bodyIdx = [homer.headIdx-1]
 
-  direction= 'right'
-  gameInProgress = false
-  gameOver = false
+
 
   render()
 }
@@ -144,14 +152,19 @@ function resetGame(){
 // Update Homer Location
 function updateHomer(){
 
-    // add existing location to body array
-    homer.body.push(homer.headIdx)
+    // append old head location to body array
+    homer.bodyIdx.push(homer.headIdx)
+    homer.bodyDir.push(direction)
 
     // remove the first index of the homer body and cache it
-    homer.grow ? homer.grow = false : homer.last = homer.body.shift()
+    if (homer.grow){
+      homer.grow = false
+    } else {
+      homer.last = homer.bodyIdx.shift()
+      homer.bodyDir.shift()
+    } 
 
     // update homer head location
-    homer.lastHeadIdx = homer.headIdx
     homer.headIdx += motion[direction].idxAdd
 }
 
@@ -168,7 +181,7 @@ function updateDonut(){
     donut.last = donut.idx
 
     // update donut location so that it does not coincide with current donut and homer locations
-    donut.idx= randBoardIdx([...homer.body, homer.headIdx, donut.idx])
+    donut.idx= randBoardIdx([...homer.bodyIdx, homer.headIdx, donut.idx])
 
     // homer grows = homer tail location stays the same 
     homer.grow = true
@@ -187,7 +200,7 @@ function checkForLoss(){
   // Homer's head overlaps with board border and direction is No-No OR
   // Homer's head overlaps with body segment
   if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
-  homer.body.some((segment) => segment === homer.headIdx)) {
+  homer.bodyIdx.some((segment) => segment === homer.headIdx)) {
     gameOver = true
     clearInterval(timerIntervalId)
     backSound.pause()
@@ -205,9 +218,10 @@ function renderHomer(){
     updateHead()
 
     // add .body to body location
-    homer.body.forEach(function(idx){
+    homer.bodyIdx.forEach(function(idx){
       cellEls[idx].classList.add('homer','body')
     })
+    cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].curve
 
   } else if (gameInProgress && !gameOver) {
 
@@ -215,10 +229,12 @@ function renderHomer(){
     updateHead()
     
     // replace old head location with body CSS and update styling for body
-    cellEls[homer.body[homer.body.length-1]].classList.replace('head', 'body')
-    cellEls[homer.body[homer.body.length-1]].style.transform =''
-    cellEls[homer.body[homer.body.length-1]].style.backgroundImage =''
-    cellEls[homer.body[homer.body.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].classList.replace('head', 'body')
+    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.transform =''
+    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+
+    // update curve in new tail location
+    cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].curve
 
     // remove body class in previous tail location
     cellEls[homer.last].classList.remove('homer', 'body')
@@ -308,7 +324,7 @@ function randBoardIdx(occupiedCells){
 function updateHead(){
   cellEls[homer.headIdx].classList.add('homer','head')
   cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
-  cellEls[homer.headIdx].style.backgroundImage = `url('/images/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+  cellEls[homer.headIdx].style.background = `${headDir}, linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
   cellEls[homer.headIdx].style.backgroundSize = cellSz
 }
 
