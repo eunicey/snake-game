@@ -39,7 +39,7 @@ h2 {
   text-align: center;
 }
 
-.scores {
+div {
   /* display: inline; */
   grid-area: scores;
 }

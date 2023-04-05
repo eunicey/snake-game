@@ -35,14 +35,17 @@ const motion = {
 }
 
 /*-------------------------------- Variables --------------------------------*/
+
 let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message, boardArr
+let highScore = 0
 
 /*------------------------ Cached Element References ------------------------*/
 
 const resetBtnEl= document.getElementById('reset')
 const boardEl = document.querySelector('.board')
 const messageEl = document.querySelector('.message')
-const scoreEl = document.querySelector('.score')
+const gameScoreEl = document.querySelector('.gameScore')
+const highScoreEl = document.querySelector('.highScore')
 
 const eatSound = new Audio('../assets/homerEats.wav')
 const loseSound = new Audio('../assets/homerDoh.mp3')
@@ -69,8 +72,8 @@ function initialize(){
 
   donut = {
     idx: Math.floor(Math.random() * totalCells),
-    consumed: 0,
-    total: 5, //should this be a constant b/c it doesn't change?
+    tally: 0,
+    beatHighScore: false,
   }
 
   direction= 'right'
@@ -91,11 +94,12 @@ function render(){
 // Run Game
 function startGame(){
   timerIntervalId= setInterval(function(){
+
     checkForLoss()
     updateHomer()
     updateDonut()
-    checkForWin()
     render()
+    
   }, speed)
 }
 
@@ -156,10 +160,14 @@ function updateDonut(){
   // if homer head overlaps with donut location:
   if (homer.headIdx === donut.idx){
 
-    // increase donut consumed count
-    ++donut.consumed
+    // increase donut tally and check if highScore is beat
+    ++donut.tally
+    if (donut.tally> highScore) {
+    highScore = donut.tally
+    donut.beatHighScore = true
+    }
 
-    // store existing location of donut
+    // store existing location of donut to clear CSS
     donut.last = donut.idx
 
     // update donut location so that it does not coincide with current donut and homer locations
@@ -170,6 +178,18 @@ function updateDonut(){
 
     // increase homer glow level unless at max
     homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
+  }
+}
+
+// Check if player lost
+function checkForLoss(){
+
+  // Homer's head overlaps with board border and direction is No-No OR
+  // Homer's head overlaps with body segment
+  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
+  homer.body.some((segment) => segment === homer.headIdx)){
+    gameOver = true
+    clearInterval(timerIntervalId)
   }
 }
 
@@ -204,7 +224,8 @@ function renderHomer(){
       cellEls[idx].classList.add('homer','body')
     })
 
-  } else if (gameOver!== 'lose'){
+  } else {
+  // } else if (!gameOver){
 
     // add '.head' to new head location and rotate head
     updateHead()
@@ -219,6 +240,9 @@ function renderHomer(){
     cellEls[homer.last].classList.remove('homer', 'body')
     cellEls[homer.last].removeAttribute('style')
   }
+  // if (gameOver){
+  //   clearInterval(timerIntervalId)
+  // }
 }
 
 // Render Donut
@@ -240,38 +264,18 @@ function renderDonut(){
   }
 }
 
-// Check if player lost
-function checkForLoss(){
-
-  // Homer's head overlaps with board border and direction is No-No OR
-  // Homer's head overlaps with body segment
-  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
-  homer.body.some((segment) => segment === homer.headIdx)){
-    gameOver = 'lose'
-    clearInterval(timerIntervalId)
-  }
-}
-
-// Check if player won - all donuts consumed
-function checkForWin(){
-
-  if (donut.consumed === donut.total){
-    gameOver = 'win'
-    clearInterval(timerIntervalId)
-  }
-}
-
 // render message
 function renderMessage(){
 
   if (!gameInProgress){
     message = 'Press any arrow key to begin!'
   } else if (gameOver) {
-    message = `You ${gameOver}!`
-    if (gameOver === 'win'){
+    if (donut.beatHighScore){
+      message = `New High Score! ${highScore}`
       winSound.volume = 0.1
       winSound.play()
     } else {
+      message =`High Score- ${highScore}`
       loseSound.volume = 0.1
       loseSound.play()
     }
@@ -282,7 +286,11 @@ function renderMessage(){
 }
 
 function renderScore(){
-  scoreEl.textContent = `${donut.consumed} of ${donut.total}`
+  gameScoreEl.textContent = donut.tally
+  if (gameOver){
+    highScoreEl.textContent = highScore
+  }
+
 }
 
 /*----------------------  Generic Functions  ---------------------------*/
