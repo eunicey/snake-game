@@ -212,37 +212,35 @@ function checkForLoss(){
 // Render Homer
 function renderHomer(){
 
-  if (!gameInProgress){
-
-    // add .head to head location and style it
+  if (!gameOver){
+    // add .head to head element and style it
     updateHead()
-
-    // add .body to body location
-    homer.bodyIdx.forEach(function(idx){
-      cellEls[idx].classList.add('homer','body')
-    })
-    cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].curve
-
-  } else if (gameInProgress && !gameOver) {
-
-    // add .head to head location and style it
-    updateHead()
-    
-    // replace old head location with body CSS and update styling for body
-    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].classList.replace('head', 'body')
-    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.transform =''
-    cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
 
     // update curve in new tail location
     cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].curve
 
-    // remove body class in previous tail location
-    cellEls[homer.last].classList.remove('homer', 'body')
-    cellEls[homer.last].removeAttribute('style')
+    if (!gameInProgress) {
 
-    if (homer.grow){
-      eatSound.volume = .1
-      eatSound.play()
+      // add .body to body elements
+      homer.bodyIdx.forEach(function(idx){
+        cellEls[idx].classList.add('homer','body')
+      })
+
+    } else {
+
+      // replace old head element with body CSS and update styling for body
+      cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].classList.replace('head', 'body')
+      cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.transform =''
+      cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+
+      // reset previous tail element
+      cellEls[homer.last].classList.remove('homer', 'body')
+      cellEls[homer.last].removeAttribute('style')
+
+      if (homer.grow){
+        eatSound.volume = .1
+        eatSound.play()
+      }
     }
   }
 }
