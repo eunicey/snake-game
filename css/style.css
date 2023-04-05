@@ -117,7 +117,7 @@ h3 {
 
 .homer.head {
   background-color: #ffd521;
-  background-image: url('/assets/homerHead.png');
+  /* background-image: url('/assets/homerHead.png'); */
   background-size: 4vmin;
   border-radius: 0px 30px 30px 0px;
 }

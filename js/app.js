@@ -197,9 +197,7 @@ function renderHomer(){
   if (!gameInProgress){
 
      // add .head to head location and style it
-    cellEls[homer.headIdx].classList.add('homer','head')
-    cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
-    cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+     updateHead()
 
     // add .body to body location
     homer.body.forEach(function(idx){
@@ -209,9 +207,7 @@ function renderHomer(){
   } else if (gameOver!== 'lose'){
 
     // add '.head' to new head location and rotate head
-    cellEls[homer.headIdx].classList.add('homer','head')
-    cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
-    cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+    updateHead()
     
     // replace old head location with body CSS and update styling for body
     cellEls[homer.body[homer.body.length-1]].classList.replace('head', 'body')
@@ -298,4 +294,10 @@ function createArray(init, step, repeat){
 function randBoardIdx(occupiedCells){
   const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
   return emptyCells[Math.floor(Math.random()* emptyCells.length)]
+}
+
+function updateHead(){
+  cellEls[homer.headIdx].classList.add('homer','head')
+  cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
+  cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
 }
