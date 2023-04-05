@@ -4,7 +4,6 @@ const totalCells = cellsInRowCol ** 2
 const cellSz = '4vmin' //height and width
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
-const speed = 250 //ms
 
 // parameters to deal with motion direction
 const motion = {
@@ -36,7 +35,7 @@ const motion = {
 
 /*-------------------------------- Variables --------------------------------*/
 
-let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, keyPress, message, boardArr
+let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, message, boardArr
 let highScore = 0
 
 /*------------------------ Cached Element References ------------------------*/
@@ -46,9 +45,10 @@ const boardEl = document.querySelector('.board')
 const messageEl = document.querySelector('.message')
 const scoreEl = document.querySelector('.score')
 
-const eatSound = new Audio('../assets/homerEats.wav')
-const loseSound = new Audio('../assets/homerDoh.mp3')
-const winSound = new Audio('../assets/homerHappy.mp3')
+const eatSound = new Audio('../audio/homerEats.wav')
+const loseSound = new Audio('../audio/homerDoh.mp3')
+const winSound = new Audio('../audio/homerHappy.mp3')
+const backSound = new Audio('../audio/simpsonsTheme.m4a')
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -62,6 +62,7 @@ initialize()
 
 // Initialize Game State
 function initialize(){
+
   donut = {
     idx: Math.floor(Math.random() * totalCells),
     tally: 0,
@@ -69,8 +70,9 @@ function initialize(){
 
   homer= {
     headIdx : randBoardIdx([...motion.left.border, ...motion.right.border, donut.idx]),
-    glowIdx: 0,
-    grow: false,
+    glowIdx : 0,
+    grow : false,
+    speed : 250
   }
   homer.body = [homer.headIdx-1]
 
@@ -79,6 +81,7 @@ function initialize(){
   gameOver = false
 
   render()
+  playBackgroundSound()
 }
 
 // Render Game
@@ -96,14 +99,14 @@ function startGame(){
     updateHomer()
     updateDonut()
     render()
-  }, speed)
+  }, homer.speed)
 }
 
 /*-------------------------------- Handle Event Listeners --------------------------------*/
 // Handle Key Presses
 function handleKeyPress(evt){
   
-  keyPress = evt.code
+  let keyPress = evt.code
 
   // execute if key is one of the arrow keys
   if (arrowKeys.find(key => key === keyPress)){
@@ -132,6 +135,7 @@ function resetGame(){
     el.removeAttribute('style')
   })
   clearInterval(timerIntervalId)
+  backSound.pause()
   initialize()
 }
 
@@ -171,6 +175,9 @@ function updateDonut(){
 
     // increase homer glow level unless at max
     homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
+
+    // reduce timerInterval
+    homer.speed -= 25
   }
 }
 
@@ -179,12 +186,11 @@ function checkForLoss(){
 
   // Homer's head overlaps with board border and direction is No-No OR
   // Homer's head overlaps with body segment
-  if (motion[direction].border.some((idx) => idx === homer.headIdx)) {
-    gameOver = 'wall'
+  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
+  homer.body.some((segment) => segment === homer.headIdx)) {
+    gameOver = true
     clearInterval(timerIntervalId)
-  } else if (homer.body.some((segment) => segment === homer.headIdx)) {
-    gameOver = 'body'
-    clearInterval(timerIntervalId)
+    backSound.pause()
   }
 }
 
@@ -303,6 +309,13 @@ function randBoardIdx(occupiedCells){
 function updateHead(){
   cellEls[homer.headIdx].classList.add('homer','head')
   cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
-  cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+  cellEls[homer.headIdx].style.backgroundImage = `url('/images/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
   cellEls[homer.headIdx].style.backgroundSize = cellSz
+}
+
+function playBackgroundSound(){
+  backSound.currentTime = 0
+  backSound.volume = .1
+  backSound.loop = true
+  backSound.play()
 }
