@@ -121,7 +121,6 @@ function handleKeyPress(evt){
       gameInProgress = true
       startGame()
     }
-    console.log('keypress')
   }
 }
 
@@ -148,8 +147,8 @@ function updateHomer(){
     homer.grow ? homer.grow = false : homer.last = homer.body.shift()
 
     // update homer head location
+    homer.lastHeadIdx = homer.headIdx
     homer.headIdx += motion[direction].idxAdd
-    console.log('updateHomer')
 }
 
 // Update Donut Location
@@ -173,7 +172,6 @@ function updateDonut(){
     // increase homer glow level unless at max
     homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
   }
-  console.log('updateDonut')
 }
 
 // Check if player lost
@@ -181,12 +179,13 @@ function checkForLoss(){
 
   // Homer's head overlaps with board border and direction is No-No OR
   // Homer's head overlaps with body segment
-  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
-  homer.body.some((segment) => segment === homer.headIdx)){
-    gameOver = true
+  if (motion[direction].border.some((idx) => idx === homer.headIdx)) {
+    gameOver = 'wall'
+    clearInterval(timerIntervalId)
+  } else if (homer.body.some((segment) => segment === homer.headIdx)) {
+    gameOver = 'body'
     clearInterval(timerIntervalId)
   }
-  console.log('checkForLoss')
 }
 
 /*-------------------------------- Update View  --------------------------------*/
@@ -203,10 +202,10 @@ function renderHomer(){
     homer.body.forEach(function(idx){
       cellEls[idx].classList.add('homer','body')
     })
+  }
 
-  } else if (!gameOver){
+  if (gameInProgress && !gameOver){
 
-    // add '.head' to new head location and rotate head
     updateHead()
     
     // replace old head location with body CSS and update styling for body
@@ -219,7 +218,8 @@ function renderHomer(){
     cellEls[homer.last].classList.remove('homer', 'body')
     cellEls[homer.last].removeAttribute('style')
   }
-  console.log('renderHomer')
+
+
 }
 
 // Render Donut
@@ -239,7 +239,6 @@ function renderDonut(){
       eatSound.play()
     }
   }
-  console.log('renderDonut')
 }
 
 // render message
@@ -299,4 +298,5 @@ function updateHead(){
   cellEls[homer.headIdx].classList.add('homer','head')
   cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
   cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+  cellEls[homer.headIdx].style.backgroundSize = cellSz
 }
