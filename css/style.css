@@ -3,10 +3,10 @@
   src: local("Trickster"), url("/assets/simpsonFont.otf")
 }
 
-/* html, body { 
+html, body { 
   height: 100%;
   width: 100%;
- } */
+ }
 
 body {
 
@@ -23,26 +23,26 @@ body {
 h1 {
   grid-area: title;
   font-size: 5rem;
-  /* margin-top: 12vh; */
+  margin-top: 12vh;
   text-align: center;
 }
 h1 > img {
   display: inline-block;
-  /* margin: auto 20px; */
+  margin: auto 20px;
   height: 1em;
 }
 
 h2 {
   grid-area: message;
   font-size: 3rem;
-  /* margin-left: 2vw; */
+  margin-left: 2vw;
   text-align: center;
 }
 
 h3 {
   font-size: 2rem;
   grid-area: score;
-  /* margin: auto auto 20px auto; */
+  margin: auto auto 20px auto;
 }
 
 #reset {
@@ -51,14 +51,14 @@ h3 {
   height: 6vh;
   font-size: 1.5rem;
   grid-area: button;
-  /* margin: 20px auto; */
+  margin: 20px auto;
   font-family: 'simpsons';
 }
 
 
 .board {
   grid-area: board;
-  /* margin: 0 auto; */
+  margin: 0 auto;
 
   display: grid;
   /* grid-template-rows: repeat(10, auto);
