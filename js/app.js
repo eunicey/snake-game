@@ -60,16 +60,12 @@ initialize()
 
 // Initialize Game State
 function initialize(){
-  // const occupiedCells = [...homer.body, homer.headIdx, donut.idx]
-  // const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
-  // donut.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
-
   homer= {
-    headIdx : 26,
-    body: [25],
+    headIdx : randBoardIdx(motion.left.border),
     glowIdx: 0,
     grow: false,
   }
+  homer.body = [homer.headIdx-1]
 
   donut = {
     idx: Math.floor(Math.random() * totalCells),
@@ -167,9 +163,7 @@ function updateDonut(){
     donut.last = donut.idx
 
     // update donut location so that it does not coincide with current donut and homer locations
-    const occupiedCells = [...homer.body, homer.headIdx, donut.idx]
-    const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
-    donut.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
+    donut.idx= randBoardIdx([...homer.body, homer.headIdx, donut.idx])
 
     // homer grows = homer tail location stays the same 
     homer.grow = true
@@ -299,4 +293,9 @@ function renderScore(){
 
 function createArray(init, step, repeat){
   return Array(repeat).fill(init).map((x, y) => x + y * step) 
+}
+
+function randBoardIdx(occupiedCells){
+  const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
+  return emptyCells[Math.floor(Math.random()* emptyCells.length)]
 }
