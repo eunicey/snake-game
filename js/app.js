@@ -81,7 +81,6 @@ function initialize(){
   gameOver = false
 
   render()
-  playBackgroundSound()
 }
 
 // Render Game
@@ -122,6 +121,7 @@ function handleKeyPress(evt){
     // run game once first key is pressed
     if (!gameInProgress){
       gameInProgress = true
+      playBackgroundSound()
       startGame()
     }
   }
@@ -249,24 +249,23 @@ function renderDonut(){
 function renderMessage(){
 
   if (!gameInProgress){
-    message = 'Press any arrow key to begin!'
+    message = 'Press any arrow key to begin'
 
   } else if (gameOver) {
 
     if (donut.tally> highScore) {
       highScore = donut.tally
-      message = `New High Score! ${highScore}`
+      message = `New High Score! -- ${highScore}`
       winSound.volume = 0.1
       winSound.play()
 
     } else {
-      message =`High Score- ${highScore}`
       loseSound.volume = 0.1
       loseSound.play()
     }
 
   } else {
-    message = ''
+    message =`High Score -- ${highScore}`
   }
 
   messageEl.textContent = message

@@ -18,6 +18,8 @@ body {
   grid-template-areas: "title score" "title board" "message board" "message button";
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr auto auto 1fr;
+  justify-content: center;
+  align-content: center;
 }
 
 h1 {
@@ -26,11 +28,11 @@ h1 {
   margin-top: 12vh;
   text-align: center;
 }
-h1 > img {
+/* h3 > img {
   display: inline-block;
   margin: auto 20px;
   height: 1em;
-}
+} */
 
 h2 {
   grid-area: message;
@@ -39,10 +41,25 @@ h2 {
   text-align: center;
 }
 
-h3 {
-  font-size: 2rem;
+#scoreBoard {
   grid-area: score;
-  margin: auto auto 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto 20px auto;
+  /* align-items: center; */
+  /* justify-items: center; */
+}
+
+.score {
+  /* display: inline-block; */
+  font-size: 3rem;
+  margin: 0 20px;
+}
+img {
+  /* display: inline-block; */
+  height: 3rem;
+  /* margin: auto; */
 }
 
 #reset {
