@@ -88,11 +88,11 @@ h3 {
 
 .donut {
   background-image: url('/assets/donut.png');
-  background-size: 3vmin;
+  background-size: 4vmin;
 }
 
 .homer.body {
-  background: #ffd521;
+  background-color: #ffd521;
   /* background-size: 400%;
   animation-name: animate;
   animation-duration: 5s;
@@ -116,9 +116,9 @@ h3 {
 }
 
 .homer.head {
-  background-color: #674743;
-  background-image: url('/assets/homerHead.jpeg');
-  background-size: 3vmin;
+  background-color: #ffd521;
+  background-image: url('/assets/homerHead.png');
+  background-size: 4vmin;
   border-radius: 0px 30px 30px 0px;
 }
 

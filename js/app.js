@@ -1,12 +1,13 @@
 /*-------------------------------- Constants --------------------------------*/
-const cellsInRowCol = 24 //must be square
+const cellsInRowCol = 20 //must be even number to so board is square
 const totalCells = cellsInRowCol ** 2
-const cellSz = '3vmin' //height and width
+const cellSz = '4vmin' //height and width
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const speed = 250 //ms
 
-const motionRules = {
+// parameters to deal with motion direction
+const motion = {
   up : {
     oppDirection : 'down',
     idxAdd : -1*cellsInRowCol,
@@ -59,6 +60,10 @@ initialize()
 
 // Initialize Game State
 function initialize(){
+  // const occupiedCells = [...homer.body, homer.headIdx, donut.idx]
+  // const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
+  // donut.idx = emptyCells[Math.floor(Math.random()* emptyCells.length)]
+
   homer= {
     headIdx : 26,
     body: [25],
@@ -67,7 +72,7 @@ function initialize(){
   }
 
   donut = {
-    idx: 29,
+    idx: Math.floor(Math.random() * totalCells),
     consumed: 0,
     total: 5, //should this be a constant b/c it doesn't change?
   }
@@ -111,7 +116,7 @@ function handleKeyPress(evt){
     keyPress= keyPress.replace('Arrow','').toLowerCase()
     
     // update direction only if it is not in the opposite direction of current motion
-    if (keyPress !== motionRules[direction].oppDirection){
+    if (keyPress !== motion[direction].oppDirection){
       direction = keyPress
     }
 
@@ -146,7 +151,7 @@ function updateHomer(){
     homer.grow ? homer.grow = false : homer.last = homer.body.shift()
 
     // update homer head location
-    homer.headIdx += motionRules[direction].idxAdd
+    homer.headIdx += motion[direction].idxAdd
 }
 
 // Update Donut Location
@@ -170,7 +175,7 @@ function updateDonut(){
     homer.grow = true
 
     // increase homer glow level unless at max
-    homer.glowIdx === glow.length ? glow.length : ++homer.glowIdx
+    homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
   }
 }
 
@@ -199,7 +204,8 @@ function renderHomer(){
 
      // add .head to head location and style it
     cellEls[homer.headIdx].classList.add('homer','head')
-    cellEls[homer.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
+    cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
 
     // add .body to body location
     homer.body.forEach(function(idx){
@@ -210,12 +216,14 @@ function renderHomer(){
 
     // add '.head' to new head location and rotate head
     cellEls[homer.headIdx].classList.add('homer','head')
-    cellEls[homer.headIdx].style.transform= `rotate(${motionRules[direction].headOrient}deg)`
+    cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
+    cellEls[homer.headIdx].style.backgroundImage = `url('/assets/homerHead.png'), linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
     
     // replace old head location with body CSS and update styling for body
     cellEls[homer.body[homer.body.length-1]].classList.replace('head', 'body')
     cellEls[homer.body[homer.body.length-1]].style.transform =''
-    cellEls[homer.body[homer.body.length-1]].style.background = `linear-gradient(${motionRules[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+    cellEls[homer.body[homer.body.length-1]].style.backgroundImage =''
+    cellEls[homer.body[homer.body.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
 
     // remove body class in previous tail location
     cellEls[homer.last].classList.remove('homer', 'body')
@@ -247,7 +255,7 @@ function checkForLoss(){
 
   // Homer's head overlaps with board border and direction is No-No OR
   // Homer's head overlaps with body segment
-  if (motionRules[direction].border.some((idx) => idx === homer.headIdx) ||
+  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
   homer.body.some((segment) => segment === homer.headIdx)){
     gameOver = 'lose'
     clearInterval(timerIntervalId)
