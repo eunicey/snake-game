@@ -202,10 +202,10 @@ function renderHomer(){
     homer.body.forEach(function(idx){
       cellEls[idx].classList.add('homer','body')
     })
-  }
 
-  if (gameInProgress && !gameOver){
+  } else if (gameInProgress && !gameOver) {
 
+    // add .head to head location and style it
     updateHead()
     
     // replace old head location with body CSS and update styling for body
@@ -217,9 +217,12 @@ function renderHomer(){
     // remove body class in previous tail location
     cellEls[homer.last].classList.remove('homer', 'body')
     cellEls[homer.last].removeAttribute('style')
+
+    if (homer.grow){
+      eatSound.volume = .1
+      eatSound.play()
+    }
   }
-
-
 }
 
 // Render Donut
@@ -233,36 +236,37 @@ function renderDonut(){
     if (donut.hasOwnProperty('last')) {
       cellEls[donut.last].classList.remove('donut')
     }
-
-    if (homer.grow){
-      eatSound.volume = .1
-      eatSound.play()
-    }
   }
 }
 
-// render message
+// Render Message
 function renderMessage(){
 
   if (!gameInProgress){
     message = 'Press any arrow key to begin!'
+
   } else if (gameOver) {
+
     if (donut.tally> highScore) {
       highScore = donut.tally
       message = `New High Score! ${highScore}`
       winSound.volume = 0.1
       winSound.play()
+
     } else {
       message =`High Score- ${highScore}`
       loseSound.volume = 0.1
       loseSound.play()
     }
+
   } else {
     message = ''
   }
+
   messageEl.textContent = message
 }
 
+// Render Score
 function renderScore(){
   scoreEl.textContent = donut.tally
 }
@@ -271,7 +275,6 @@ function renderScore(){
 function renderBoard(){
 
   boardArr = [...Array(totalCells).keys()]
-
   boardEl.style.gridTemplate= `repeat(${cellsInRowCol},${cellSz}) / repeat(${cellsInRowCol},${cellSz})`
 
   for (let i=0; i< totalCells; i++) {
@@ -285,15 +288,18 @@ function renderBoard(){
 
 /*----------------------  Generic Functions  ---------------------------*/
 
+// Create an array with length [repeat] and values starting with [init] at [step] intervals 
 function createArray(init, step, repeat){
   return Array(repeat).fill(init).map((x, y) => x + y * step) 
 }
 
+// Randomly choose an index in the board array that does not overlap with any index in [occupiedCells]
 function randBoardIdx(occupiedCells){
   const emptyCells = boardArr.filter(cell => !occupiedCells.includes(cell))
   return emptyCells[Math.floor(Math.random()* emptyCells.length)]
 }
 
+// Update cell with head class and styling
 function updateHead(){
   cellEls[homer.headIdx].classList.add('homer','head')
   cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
