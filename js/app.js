@@ -1,5 +1,5 @@
 /*-------------------------------- Constants --------------------------------*/
-const cellsInRowCol = 20 //must be even number to so board is square
+const cellsInRowCol = 16 //must be even number to so board is square
 const totalCells = cellsInRowCol ** 2
 const cellSz = '3vmin' //height and width
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
@@ -86,8 +86,6 @@ function initialize(){
   }
   homer.bodyIdx = [homer.headIdx-1]
 
-
-
   render()
 }
 
@@ -142,8 +140,8 @@ function resetGame(){
     el.classList.value = 'cell'
     el.removeAttribute('style')
   })
+
   clearInterval(timerIntervalId)
-  backSound.pause()
   initialize()
 }
 
@@ -190,21 +188,24 @@ function updateDonut(){
     homer.glowIdx === glow.length-1 ? glow.length-1 : ++homer.glowIdx
 
     // reduce timerInterval
-    homer.speed -= 25
+    homer.speed -= 10
+    clearInterval(timerIntervalId)
+    startGame()
   }
 }
 
-// Check if player lost
+// Check if player lost:
+// Homer's head overlaps with board border and direction is No-No OR
+// Homer's head overlaps with body segment
 function checkForLoss(){
 
-  // Homer's head overlaps with board border and direction is No-No OR
-  // Homer's head overlaps with body segment
   if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
   homer.bodyIdx.some((segment) => segment === homer.headIdx)) {
     gameOver = true
     clearInterval(timerIntervalId)
     backSound.pause()
   }
+
 }
 
 /*-------------------------------- Update View  --------------------------------*/
@@ -256,6 +257,7 @@ function renderDonut(){
     if (donut.hasOwnProperty('last')) {
       cellEls[donut.last].classList.remove('donut')
     }
+
   }
 }
 

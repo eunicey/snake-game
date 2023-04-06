@@ -87,6 +87,8 @@ main > img{
   margin: 0 auto;
   width: 100%;
   height: 100%;
+  justify-self: center;
+  align-self: center;
 }
 
 .board {
@@ -94,19 +96,12 @@ main > img{
   grid-column: 1 / 1;
   grid-row: 1 / 1;
   z-index: 1;
-
-  /* margin: 50% 50%; */
   justify-self: center;
   align-self: center;
+
   border: 3px solid #4d3a29;
-  /* grid-template-rows: repeat(10, auto);
-  grid-template-columns: repeat(10, auto); */
-  /* to place child elements into the grid */
-  /* grid-column: */
-  /* grid-row */
-  /* background-color: black; */
-  /* text-align: center; */
-  /* color: black; */
+
+  /* margin: 50% 50%; */
   /* grid-gap: 0vmin; */
 
   /* justify-items and align-items */
@@ -117,9 +112,6 @@ main > img{
 
 }
 
-.cell {
-  /* background-color: #9A7855; */
-}
 .cell:not(.homer){
   border: 1px solid #7e6044;
 }
@@ -129,15 +121,19 @@ main > img{
   background-size: 3vmin;
 }
 
+.homer.head {
+  border-radius: 0px 10px 10px 0px;
+}
+
 .homer.body {
   background-color: #ffd521;
   /* background-size: 400%;
   animation-name: animate;
   animation-duration: 5s;
   animation-timing-function: linear; 
-  animation-iteration-count: infinite; */
-  /* animation-direction: alternate; */
-  /* animation-fill-mode: backwards; */
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: backwards; */
 }
 
 /* @keyframes animate {
@@ -149,9 +145,7 @@ main > img{
   }
 } */
 
-.homer.head {
-  border-radius: 0px 10px 10px 0px;
-}
+
 
 
 
