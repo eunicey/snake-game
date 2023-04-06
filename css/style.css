@@ -16,7 +16,7 @@ body {
   align-content: center;
 
   display: grid;
-  background-color: #9A7855;
+  background-color: #7f6346;
   color: black;
   font-family: 'simpsons', Arial, Helvetica, sans-serif;
 }
@@ -28,15 +28,17 @@ body {
 h1 {
   grid-area: title;
   font-size: 10vmin;
-  /* margin-top: 12vh; */
+  margin-left: 3vmin;
   text-align: center;
   color: #15fc00;
+  /* align-self: center; remove if you want to align it to the top instead of center across two cells */
 }
 
 h2 {
   grid-area: message;
   font-size: 6vmin;
   text-align: center;
+  margin-left: 3vmin;
 }
 
 .scoreBoard {
@@ -61,7 +63,8 @@ h2 {
   height: 8vmin;
   border-radius: 2vmin;
   font-size: 3.5vmin;
-  /* margin: 20px auto; */
+  justify-self: center;
+  align-self: center;
 
   grid-area: button;
   font-family: 'simpsons';
@@ -86,7 +89,6 @@ main > img{
   grid-row: 1 / 1;
   /* margin: 0 auto; */
   width: 100%;
-  height: 100%;
   justify-self: center;
   align-self: center;
 }
@@ -100,8 +102,8 @@ main > img{
   align-self: center;
 
 
-  /* border: 3px solid #4d3a29;
-  border-radius: 10px; */
+  border: 1vmin solid #4d3a29;
+  border-radius: 1vmin;
   
   /* margin: 50% 50%; */
   /* grid-gap: 0vmin; */
@@ -115,7 +117,7 @@ main > img{
 }
 
 .cell:not(.homer){
-  border: 1px solid #7e6044;
+  border: 1px solid #5d4732;
 }
 
 .donut {
