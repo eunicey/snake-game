@@ -322,8 +322,16 @@ function randBoardIdx(occupiedCells){
 
 // Update cell with head class and styling
 function updateHead(){
+
   cellEls[homer.headIdx].classList.add('homer','head')
-  cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
+
+  // If moving left, flip face horizontally. Otherwise, rotate face.
+  if (direction === 'left'){
+    cellEls[homer.headIdx].style.transform= "scaleX(-1)"
+  } else {
+    cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
+  }
+
   cellEls[homer.headIdx].style.background = `${headDir}, linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
   cellEls[homer.headIdx].style.backgroundSize = cellSz
 }
