@@ -12,29 +12,29 @@ const motion = {
     oppDirection : 'down',
     wall: createArray(0, 1, cellsInRowCol),
     headIdxAdd : -1*cellsInRowCol,
-    headOrient: 270,
-    tailCurve: '0 0 2vmin 2vmin'
+    headOrient : 270,
+    tailCurve : '0 0 2vmin 2vmin',
   },
   down : {
     oppDirection : 'up',
     wall: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
     headIdxAdd : cellsInRowCol,
     headOrient: 90,
-    tailCurve: '2vmin 2vmin 0 0'
+    tailCurve : '2vmin 2vmin 0 0',
   },
   left : {
     oppDirection : 'right',
     wall: createArray(0, cellsInRowCol, cellsInRowCol),
     headIdxAdd : -1,
-    headOrient: 180,
-    tailCurve: '0 2vmin 2vmin 0',
+    headOrient : 180,
+    tailCurve : '0 2vmin 2vmin 0',
   },
   right : {
     oppDirection : 'left',
-    wall: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
+    wall : createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
     headIdxAdd : 1,
-    headOrient: 0,
-    tailCurve: '2vmin 0 0 2vmin',
+    headOrient : 0,
+    tailCurve : '2vmin 0 0 2vmin',
   }
 }
 
@@ -73,8 +73,8 @@ function initialize(){
   direction= 'right'
 
   donut = {
-    idx: Math.floor(Math.random() * totalCells),
-    tally: 0,
+    idx : Math.floor(Math.random() * totalCells),
+    tally : 0,
   }
 
   homer= {
@@ -82,7 +82,7 @@ function initialize(){
     glowIdx : 0,
     grow : false,
     speed : 250,
-    bodyDir: [direction],
+    bodyDir : [direction],
   }
   homer.bodyIdx = [homer.headIdx-1]
 
