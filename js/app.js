@@ -10,31 +10,31 @@ const headDir = "url('/images/homerHead.png')"
 const motion = {
   up : {
     oppDirection : 'down',
-    idxAdd : -1*cellsInRowCol,
-    border: createArray(0, 1, cellsInRowCol),
+    wall: createArray(0, 1, cellsInRowCol),
+    headIdxAdd : -1*cellsInRowCol,
     headOrient: 270,
-    curve: '0 0 30px 30px'
+    tailCurve: '0 0 2vmin 2vmin'
   },
   down : {
     oppDirection : 'up',
-    idxAdd : cellsInRowCol,
-    border: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
+    wall: createArray(totalCells-cellsInRowCol, 1, cellsInRowCol),
+    headIdxAdd : cellsInRowCol,
     headOrient: 90,
-    curve: '30px 30px 0 0'
+    tailCurve: '2vmin 2vmin 0 0'
   },
   left : {
     oppDirection : 'right',
-    idxAdd : -1,
-    border: createArray(0, cellsInRowCol, cellsInRowCol),
+    wall: createArray(0, cellsInRowCol, cellsInRowCol),
+    headIdxAdd : -1,
     headOrient: 180,
-    curve: '0 30px 30px 0',
+    tailCurve: '0 2vmin 2vmin 0',
   },
   right : {
     oppDirection : 'left',
-    idxAdd : 1,
-    border: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
+    wall: createArray(cellsInRowCol-1, cellsInRowCol, cellsInRowCol),
+    headIdxAdd : 1,
     headOrient: 0,
-    curve: '30px 0 0 30px',
+    tailCurve: '2vmin 0 0 2vmin',
   }
 }
 
@@ -78,7 +78,7 @@ function initialize(){
   }
 
   homer= {
-    headIdx : randBoardIdx([...motion.left.border, ...motion.right.border, donut.idx]),
+    headIdx : randBoardIdx([...motion.left.wall, ...motion.right.wall, donut.idx]),
     glowIdx : 0,
     grow : false,
     speed : 250,
@@ -163,7 +163,7 @@ function updateHomer(){
     } 
 
     // update homer head location
-    homer.headIdx += motion[direction].idxAdd
+    homer.headIdx += motion[direction].headIdxAdd
 }
 
 // Update Donut Location
@@ -195,11 +195,11 @@ function updateDonut(){
 }
 
 // Check if player lost:
-// Homer's head overlaps with board border and direction is No-No OR
+// Homer's head overlaps with board wall and direction is No-No OR
 // Homer's head overlaps with body segment
 function checkForLoss(){
 
-  if (motion[direction].border.some((idx) => idx === homer.headIdx) ||
+  if (motion[direction].wall.some((idx) => idx === homer.headIdx) ||
   homer.bodyIdx.some((segment) => segment === homer.headIdx)) {
     gameOver = true
     clearInterval(timerIntervalId)
@@ -218,7 +218,7 @@ function renderHomer(){
     updateHead()
 
     // update curve in new tail location
-    cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].curve
+    cellEls[homer.bodyIdx[0]].style.borderRadius = motion[homer.bodyDir[0]].tailCurve
 
     if (!gameInProgress) {
 
