@@ -40,7 +40,7 @@ const motion = {
 
 /*-------------------------------- Variables --------------------------------*/
 
-let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, message, boardArr
+let donut, homer, cellEls, timerIntervalId, gameInProgress, gameOver, message, boardArr, keyIsPressed
 let highScore = 0
 
 /*------------------------ Cached Element References ------------------------*/
@@ -71,6 +71,7 @@ function initialize(){
   gameInProgress = false
   gameOver = false
   direction= 'right'
+  keyIsPressed = false
 
   donut = {
     idx : Math.floor(Math.random() * totalCells),
@@ -119,9 +120,10 @@ function handleKeyPress(evt){
     // make keyPress match variable keys (up, down,..)
     keyPress= keyPress.replace('Arrow','').toLowerCase()
     
-    // update direction only if it is not in the opposite direction of current motion
-    if (keyPress !== motion[direction].oppDirection){
+    // update direction only if it is not in the opposite direction of current motion and other key isn't already pressed
+    if (keyPress !== motion[direction].oppDirection && !keyIsPressed){
       direction = keyPress
+      keyIsPressed= true
     }
 
     // run game once first key is pressed
@@ -242,6 +244,8 @@ function renderHomer(){
         eatSound.volume = .1
         eatSound.play()
       }
+
+      keyIsPressed= false
     }
   }
 }
