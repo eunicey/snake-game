@@ -1,7 +1,7 @@
 /*-------------------------------- Constants --------------------------------*/
 const cellsInRowCol = 16 //must be even number to so board is square
 const totalCells = cellsInRowCol ** 2
-const cellSz = '3vmin' //height and width
+const cellSz = '24px' //height and width
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const headDir = "url('/images/homerHead.png')"

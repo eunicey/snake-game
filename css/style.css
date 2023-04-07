@@ -31,7 +31,6 @@ h1 {
   font-size: 10vmin;
   text-align: center;
   color: #15fc00;
-  /* align-self: center; remove if you want to align it to the top instead of center across two cells */
 }
 
 h2 {
@@ -89,8 +88,6 @@ main > img{
 }
 
 .board {
-  max-width: 397px;
-  max-height: 397px;
   display: grid;
   grid-column: 1 / 1;
   grid-row: 1 / 1;
@@ -108,7 +105,7 @@ main > img{
 
 .donut {
   background-image: url('/images/donut.png');
-  background-size: 3vmin;
+  background-size: 24px;
 }
 
 .homer.head {
