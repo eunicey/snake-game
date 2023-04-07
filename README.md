@@ -46,3 +46,4 @@ This game has the same mechanics and gameplay as the classic 1970s arcade game "
 - Add shadow to snake and donut
 - Improve donut resolution
 - Homer's mouth opens when it gets closer to the donut
+- Animate glow feature once player passes high score

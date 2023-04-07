@@ -1,8 +1,11 @@
 /*-------------------------------- Constants --------------------------------*/
-const cellsInRowCol = 15 //must be even number to so board is square
+const cellsInRowCol = 15
 const totalCells = cellsInRowCol ** 2
-const cellSz = '25px' //height and width
+const cellSz = '25px'
+
 const glow = ['#ffd521', '#d8db1b', '#b1e216', '#63ef0b', '#15fc00']
+const baseColor = ['#ffd521', '#f3d71f', '#e8d91e', '#dcdb1c', '#d0dd1a']
+
 const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 const headDir = "url('/images/homerHead.png')"
 
@@ -234,7 +237,7 @@ function renderHomer(){
       // replace old head element with body CSS and update styling for body
       cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].classList.replace('head', 'body')
       cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.transform =''
-      cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+      cellEls[homer.bodyIdx[homer.bodyIdx.length-1]].style.background = `linear-gradient(${motion[direction].headOrient}deg, ${baseColor[homer.glowIdx]}, ${glow[homer.glowIdx]}, ${baseColor[homer.glowIdx]})`
 
       // reset previous tail element
       cellEls[homer.last].classList.remove('homer', 'body')
@@ -336,7 +339,7 @@ function updateHead(){
     cellEls[homer.headIdx].style.transform= `rotate(${motion[direction].headOrient}deg)`
   }
 
-  cellEls[homer.headIdx].style.background = `${headDir}, linear-gradient(${motion[direction].headOrient}deg, #ffd521, ${glow[homer.glowIdx]}, #ffd521)`
+  cellEls[homer.headIdx].style.background = `${headDir}, linear-gradient(${motion[direction].headOrient}deg, ${baseColor[homer.glowIdx]}, ${glow[homer.glowIdx]}, ${baseColor[homer.glowIdx]})`
   cellEls[homer.headIdx].style.backgroundSize = cellSz
 }
 
